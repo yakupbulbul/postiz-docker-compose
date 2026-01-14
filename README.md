@@ -1,7 +1,3 @@
----
-title: Docker Compose
-description: 'Install Postiz using Docker Compose'
----
 
 ## Watch the Tutorial for docker-compose install:
 [https://m.youtube.com/watch?v=A6CjAmJOWvA&t=5s](https://m.youtube.com/watch?v=A6CjAmJOWvA&t=5s)
