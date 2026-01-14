@@ -37,6 +37,9 @@ Then run:
 docker compose up
 ```
 
+Wait for it to access:
+Open your website on https://localhost:4007
+
 ---
 
 ## Example `docker-compose.yml` file
