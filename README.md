@@ -4,7 +4,7 @@
 
 ## Warning
 If you are upgrading from Postiz old version, please make sure you update your docker compose, you can read more here:
-https://github.com/gitroomhq/postiz-app/releases/tag/v2.12.0
+https://docs.postiz.com/installation/migration
 
 ## Docker Compose
 
