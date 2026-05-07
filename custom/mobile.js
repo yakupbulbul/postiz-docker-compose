@@ -171,16 +171,44 @@
   /* ----------------------------------------------------------
      Init — wait for DOM ready
      ---------------------------------------------------------- */
+  /* ----------------------------------------------------------
+     Calendar week-view: abbreviate full day names to 3 letters
+     so they don't wrap in narrow columns (Mon, Tue, Wed …)
+     ---------------------------------------------------------- */
+  var DAY_MAP = {
+    'Monday': 'Mon', 'Tuesday': 'Tue', 'Wednesday': 'Wed',
+    'Thursday': 'Thu', 'Friday': 'Fri', 'Saturday': 'Sat', 'Sunday': 'Sun'
+  };
+
+  function abbreviateDayNames() {
+    // Calendar week-view day header cells: .text-[14px].font-[500].text-newTableText
+    var dayEls = document.querySelectorAll('.text-\\[14px\\].font-\\[500\\].text-newTableText');
+    dayEls.forEach(function (el) {
+      var t = el.textContent.trim();
+      if (DAY_MAP[t]) el.textContent = DAY_MAP[t];
+    });
+  }
+
+  var calObserver = new MutationObserver(function () {
+    // Debounce slightly so we don't run on every single DOM mutation
+    clearTimeout(calObserver._t);
+    calObserver._t = setTimeout(abbreviateDayNames, 80);
+  });
+
   function init() {
     buildNav();
+    abbreviateDayNames();
+    calObserver.observe(document.body, { childList: true, subtree: true });
 
     // Re-check viewport on resize (tablet → desktop: remove nav)
     window.addEventListener('resize', function () {
       var nav = document.getElementById('mobile-bottom-nav');
       if (window.innerWidth > 768) {
         if (nav) nav.remove();
+        calObserver.disconnect();
       } else {
         if (!nav) buildNav();
+        calObserver.observe(document.body, { childList: true, subtree: true });
       }
     });
   }
