@@ -187,6 +187,14 @@
       var t = el.textContent.trim();
       if (DAY_MAP[t]) el.textContent = DAY_MAP[t];
     });
+
+    // Calendar date sub-cells: strip year from "05/04/2026" → "05/04"
+    var dateEls = document.querySelectorAll('.bg-newTableHeader .text-\\[14px\\].font-\\[600\\]');
+    dateEls.forEach(function (el) {
+      var t = el.textContent.trim();
+      var m = t.match(/^(\d{2}\/\d{2})\/\d{4}$/);
+      if (m) el.textContent = m[1];
+    });
   }
 
   var calObserver = new MutationObserver(function () {
