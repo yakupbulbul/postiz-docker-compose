@@ -89,7 +89,7 @@ html, body {
   #mobile-bottom-nav button:hover,
   #mobile-bottom-nav a.active,
   #mobile-bottom-nav button.active {
-    color: var(--new-textItemFocused, #fff);
+    color: #ffffff !important;
   }
 
   #mobile-bottom-nav svg {
@@ -170,9 +170,14 @@ html, body {
     gap: 4px !important;
   }
 
-  /* Launches sidebar (channel list) — collapse width on mobile */
-  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col {
-    min-width: 0 !important;
+  /* Launches calendar sidebar — hide the 260px channels panel */
+  .flex.relative.flex-col.w-\[260px\] {
+    display: none !important;
+  }
+
+  /* Let the calendar content fill the full width */
+  .flex.flex-1.gap-\[1px\] {
+    gap: 0 !important;
   }
 }
 
