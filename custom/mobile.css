@@ -175,9 +175,25 @@ html, body {
     display: none !important;
   }
 
-  /* Let the calendar content fill the full width */
+  /* Stack two-panel layouts (calendar, settings) vertically on mobile */
   .flex.flex-1.gap-\[1px\] {
+    flex-direction: column !important;
     gap: 0 !important;
+  }
+
+  /* Settings left nav — limit height and scroll horizontally */
+  .flex.flex-1.gap-\[1px\] > .bg-newBgColorInner:first-child {
+    max-height: 56px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Settings left nav items — inline so they scroll */
+  .flex.flex-1.gap-\[1px\] > .bg-newBgColorInner:first-child > * {
+    display: inline-flex !important;
+    white-space: nowrap !important;
   }
 }
 
