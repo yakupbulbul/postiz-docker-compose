@@ -150,7 +150,9 @@ html, body {
 
   /* Shrink page title font */
   .text-\[24px\].font-\[600\] {
-    font-size: 16px !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px !important;
   }
 
   /* Hide lower-priority header icons on very small screens */
@@ -509,6 +511,26 @@ html, body {
   .w-\[600px\]     { width: 100% !important; }
   .w-\[400px\]     { width: 100% !important; }
   .max-w-\[800px\] { max-width: 100% !important; }
+
+  /* Notification toggle rows: keep text left, toggle right */
+  .flex.items-center.justify-between > .flex.flex-col:first-child {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+  }
+
+  /* Compact toggle switch: slightly smaller on mobile */
+  .w-\[57px\].h-\[34px\].rounded-\[100px\] {
+    width: 46px !important;
+    height: 26px !important;
+    padding: 3px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Reduce settings card padding on mobile */
+  .bg-sixth.border.rounded-\[4px\].p-\[24px\],
+  .bg-sixth.rounded-\[4px\].p-\[24px\] {
+    padding: 14px !important;
+  }
 
   /* Settings section form: stack label + control side-by-side rows */
   .flex.justify-between.gap-\[20px\]:has(input),
