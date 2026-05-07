@@ -195,6 +195,16 @@ html, body {
     display: inline-flex !important;
     white-space: nowrap !important;
   }
+
+  /* Content panel (second child or only child) — fill remaining height */
+  .flex.flex-1.gap-\[1px\] > .bg-newBgColorInner:not(:first-child),
+  .flex.flex-1.gap-\[1px\] > .bg-newBgColorInner:only-child {
+    flex: 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    white-space: normal !important;
+  }
 }
 
 /* ------------------------------------------------------------
@@ -640,6 +650,21 @@ html, body {
   .flex.flex-col.items-center.justify-center {
     padding: 24px 16px !important;
     text-align: center;
+  }
+
+  /* Large heading text (empty-state titles like Plugs page) — scale down */
+  .text-\[48px\] {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
+  }
+
+  /* Reduce content padding on narrow screens so text has more room */
+  .bg-newBgColorInner.p-\[20px\] {
+    padding: 12px !important;
   }
 
   /* Sticky / fixed elements — ensure they don't overlap bottom nav */
