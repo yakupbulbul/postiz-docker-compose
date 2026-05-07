@@ -255,6 +255,429 @@ html, body {
   }
 }
 
+/* ------------------------------------------------------------
+   COMMIT 6 — Post composer / New Launch modal
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Reduce the enormous 40px outer padding inside the modal wrapper */
+  .w-full.h-full.flex-1.p-\[40px\].flex.relative,
+  [class*="mantine-Modal-body"] .p-\[40px\] {
+    padding: 0 !important;
+  }
+
+  /* The inner card: keep flex-col but remove border-radius on mobile */
+  .flex-1.bg-newBgColorInner.rounded-\[20px\].flex-col {
+    border-radius: 0 !important;
+  }
+
+  /* Main row (editor + preview) → stack vertically */
+  .flex-1.flex:has(.w-\[580px\]) {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Left panel (editor) — full width, reasonable max height */
+  .flex.flex-col.flex-1.border-e.border-newBorder {
+    max-height: 55vh !important;
+    overflow-y: auto !important;
+    border-inline-end: none !important;
+    border-bottom: 1px solid var(--new-border, #2b2a2a) !important;
+  }
+
+  /* Right panel (preview) — override fixed 580px, full width */
+  .w-\[580px\].flex.flex-col {
+    width: 100% !important;
+    max-height: 40vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Header rows inside composer panels — tighten */
+  .bg-newBgColor.h-\[65px\].rounded-s-\[20px\],
+  .bg-newBgColor.h-\[65px\].rounded-e-\[20px\] {
+    height: 48px !important;
+    font-size: 14px !important;
+    border-radius: 0 !important;
+  }
+
+  /* Bottom action bar in composer — allow wrapping */
+  .select-none.h-\[84px\].py-\[20px\].border-t {
+    height: auto !important;
+    padding: 10px 12px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Channel/integration pill list — wrap horizontally */
+  .innerComponent.flex-1.flex {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Reduce heavy padding inside editor scroll area */
+  .gap-\[32px\].flex.flex-col.pe-\[8px\].pt-\[20px\].ps-\[20px\] {
+    padding: 12px 8px !important;
+    gap: 16px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 7 — Analytics page
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Analytics main container — stack chart + sidebar vertically */
+  .flex.gap-\[24px\].flex-1:has(canvas) {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  /* Chart canvas wrapper — full width, fixed reasonable height */
+  .flex.flex-col.gap-\[24px\].flex-1:has(canvas) {
+    width: 100% !important;
+  }
+
+  /* Chart itself — constrain height on mobile */
+  canvas {
+    max-height: 260px !important;
+  }
+
+  /* Analytics stat number blocks — wrap into 2-column grid */
+  .flex.gap-\[24px\].flex-1 > .flex.flex-col.gap-\[24px\] {
+    width: 100% !important;
+  }
+
+  /* Stats header row (title + date picker) — wrap */
+  .flex.items-center.justify-between:has(canvas),
+  .flex.justify-between.items-center {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Date range or filter inputs — stretch */
+  .flex.gap-\[8px\]:has(input[type="date"]),
+  .flex.gap-\[8px\]:has(input[type="text"]) {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 8 — Integrations / Channels (Plugs) page
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Plugs sidebar (w-[260px] collapsible) — hide on mobile, use bottom nav instead */
+  .group.sidebar,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.gap-\[15px\].transition-all.w-\[260px\],
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.gap-\[15px\].transition-all.w-\[100px\] {
+    display: none !important;
+  }
+
+  /* Plugs content area — full width without sidebar */
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\] {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Integration provider cards grid — 2 cols on mobile */
+  .flex.flex-wrap.gap-\[12px\] {
+    gap: 8px !important;
+  }
+
+  /* Provider/integration cards — ensure min width for 2-col layout */
+  .flex.flex-wrap.gap-\[12px\] > * {
+    min-width: calc(50% - 8px) !important;
+    flex: 1 1 calc(50% - 8px) !important;
+  }
+
+  @media (max-width: 400px) {
+    .flex.flex-wrap.gap-\[12px\] > * {
+      min-width: 100% !important;
+      flex: 1 1 100% !important;
+    }
+  }
+
+  /* Integration card inner content — tighter padding */
+  .rounded-\[8px\].p-\[12px\].flex,
+  .rounded-\[12px\].p-\[20px\].flex.flex-col {
+    padding: 10px !important;
+  }
+
+  /* Provider icon + name row in cards */
+  .flex.gap-\[8px\].items-center {
+    gap: 6px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 9 — Settings pages
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Settings nav tabs — horizontal scroll */
+  [role="tablist"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+  }
+  [role="tablist"]::-webkit-scrollbar { display: none !important; }
+
+  /* Fixed-width settings containers — full width */
+  .max-w-\[600px\] { max-width: 100% !important; }
+  .w-\[600px\]     { width: 100% !important; }
+  .w-\[400px\]     { width: 100% !important; }
+  .max-w-\[800px\] { max-width: 100% !important; }
+
+  /* Settings section form: stack label + control side-by-side rows */
+  .flex.justify-between.gap-\[20px\]:has(input),
+  .flex.justify-between.gap-\[20px\]:has(select),
+  .flex.justify-between.gap-\[20px\]:has(textarea) {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* Billing plan cards — vertical stack */
+  .flex.flex-row.gap-\[20px\]:has(.rounded-\[16px\]),
+  .flex.gap-\[20px\]:has(.rounded-\[16px\]) {
+    flex-direction: column !important;
+  }
+
+  /* API key rows — break long tokens */
+  .font-mono, code, .text-\[12px\].font-mono {
+    word-break: break-all !important;
+    white-space: pre-wrap !important;
+  }
+
+  /* Settings sub-section header rows */
+  .flex.justify-between.items-center:has(h3),
+  .flex.justify-between.items-center:has(h2) {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 10 — Dropdown & popover overflow prevention
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Mantine select dropdowns — prevent viewport overflow */
+  [class*="mantine-Select-dropdown"],
+  [class*="mantine-Combobox-dropdown"],
+  [class*="mantine-Popover-dropdown"],
+  [class*="mantine-DatePicker-dropdown"],
+  [class*="mantine-DatePickerInput-dropdown"] {
+    max-width: calc(100vw - 24px) !important;
+    max-height: 50vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Organisation selector dropdown — clamp to viewport */
+  .absolute.bg-newBgColorInner.rounded-\[12px\] {
+    max-width: calc(100vw - 24px) !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  /* Mantine menu dropdown */
+  [class*="mantine-Menu-dropdown"] {
+    max-width: calc(100vw - 24px) !important;
+  }
+
+  /* Context menus / absolute panels that might go off right edge */
+  .absolute.right-0 {
+    right: auto !important;
+    left: 0 !important;
+  }
+
+  /* Prevent popover arrow overflows */
+  [class*="mantine-Popover-arrow"] {
+    display: none !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 11 — Notifications / toasts + media library
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Move Mantine toast notifications above bottom nav */
+  [class*="mantine-Notifications-root"],
+  .mantine-Notifications-root {
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+
+  /* Individual notification — full width */
+  [class*="mantine-Notification-root"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Media library grid — 2 cols on mobile */
+  .grid.grid-cols-4,
+  .grid.grid-cols-5,
+  .grid.grid-cols-6 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  /* Media library upload drop zone — large enough to tap */
+  .border-dashed {
+    min-height: 120px !important;
+    padding: 20px !important;
+  }
+
+  /* Media preview modal — full screen */
+  [class*="mantine-Modal-content"]:has(video),
+  [class*="mantine-Modal-content"]:has(img:not([width="20"])) {
+    min-height: 80dvh !important;
+  }
+
+  /* Media items — touch-friendly sizing */
+  .grid.grid-cols-4 > *,
+  .grid.grid-cols-5 > *,
+  .grid.grid-cols-6 > * {
+    min-height: 80px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 12 — Filter bars, date pickers, search UI
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Calendar top filter bar — wrap items */
+  .flex.gap-\[12px\].items-center:not(#mobile-bottom-nav *) {
+    flex-wrap: wrap !important;
+  }
+
+  /* Launches / calendar top toolbar — wrap and reduce padding */
+  .flex.justify-between.gap-\[10px\] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* Search bar — full width */
+  input[type="search"],
+  input[placeholder*="earch"],
+  input[placeholder*="Search"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* View switcher buttons (Day / Week / Month) */
+  .flex.gap-\[4px\] > button,
+  .flex.gap-\[8px\] > [role="tab"] {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    font-size: 12px !important;
+  }
+
+  /* Date picker inputs — full width stacking */
+  [class*="mantine-DateInput-input"],
+  [class*="mantine-DatePickerInput-input"] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Filter chips / tag list — horizontal scroll */
+  .flex.flex-wrap.gap-\[8px\]:has([role="option"]) {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* Reduce gap in dense list headers */
+  .flex.items-center.gap-\[16px\] {
+    gap: 8px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 13 — General polish & edge cases
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Break long words (URLs, handles, keys) before they overflow */
+  p, span, div, td, li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* Truncate long page/post titles in single lines */
+  h1, h2, h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Loading skeleton — full width */
+  [class*="mantine-Skeleton-root"] {
+    max-width: 100% !important;
+  }
+
+  /* Empty states — center on mobile */
+  .flex.flex-col.items-center.justify-center {
+    padding: 24px 16px !important;
+    text-align: center;
+  }
+
+  /* Sticky / fixed elements — ensure they don't overlap bottom nav */
+  .fixed.bottom-\[20px\],
+  .fixed.bottom-\[16px\],
+  .fixed.bottom-\[12px\] {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Tables — horizontal scroll wrapper */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap;
+  }
+
+  /* Table cells — prevent excessive shrinking */
+  th, td {
+    min-width: 80px;
+    white-space: nowrap;
+  }
+
+  /* Reduce very large padding wrappers */
+  .p-\[40px\] { padding: 16px !important; }
+  .p-\[32px\] { padding: 16px !important; }
+  .px-\[40px\] { padding-left: 16px !important; padding-right: 16px !important; }
+  .py-\[40px\] { padding-top: 20px !important; padding-bottom: 20px !important; }
+
+  /* Polotno / image editor — hide on mobile with a message */
+  .polotno-workspace-container {
+    display: none !important;
+  }
+
+  /* CopilotKit — ensure it doesn't overflow */
+  [class*="copilot"] {
+    max-width: calc(100vw - 16px) !important;
+  }
+
+  /* Onboarding / welcome dialogs — full screen treatment */
+  [class*="mantine-Modal-content"]:has(.text-\[40px\]),
+  [class*="mantine-Modal-content"]:has(.text-\[32px\]) {
+    min-height: 70dvh !important;
+  }
+
+  /* Prevent header overflow from long org names */
+  .flex.gap-\[8px\].items-center .text-\[14px\] {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* RTL compatibility for bottom nav */
+  [dir="rtl"] #mobile-bottom-nav {
+    direction: rtl;
+  }
+}
+
 /* Safe area for notched phones */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   #mobile-bottom-nav {
