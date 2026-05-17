@@ -231,55 +231,51 @@
      class "cursor-pointer w-[74px]", NOT role="tab").
      Only fires once per session; won't override manual switches.
      ---------------------------------------------------------- */
-  var DAY_VIEW_KEY = 'postiz_mobile_day_view_switched';
-
+  /* Commit 30 — Fixed: two-step switch
+     1. Click the calendar-grid icon if currently in list view
+     2. Then click "Day" tab (w-[74px] button group)
+     Retry up to 30× to handle slow React hydration */
   function switchToDayView() {
     // Only on /launches route
     if (getActivePath().indexOf('/launches') !== 0) return;
-    // Only once per session
-    if (sessionStorage.getItem(DAY_VIEW_KEY)) return;
 
     function trySwitch() {
-      // Postiz view switcher: plain divs with class "cursor-pointer w-[74px] text-center rounded-[6px]"
-      // inside container "flex flex-row p-[4px] border border-newTableBorder rounded-[8px]"
-      // Active state class: "text-textItemFocused bg-boxFocused"
-      var allClickable = Array.from(document.querySelectorAll(
-        '.cursor-pointer, [class*="74px"], [class*="newTableBorder"] *'
+      // Step 1: Find the view-type icons (w-[34px] buttons: calendar vs list)
+      // The calendar grid icon is the first one; list icon is second.
+      var iconBtns = Array.from(document.querySelectorAll(
+        '.pt-\\[6px\\].pb-\\[5px\\].cursor-pointer.flex.justify-center.items-center'
       ));
+      if (iconBtns.length >= 1) {
+        var calendarIcon = iconBtns[0];
+        var isCalActive = calendarIcon.classList.contains('text-textItemFocused') ||
+                          calendarIcon.classList.contains('bg-boxFocused');
+        if (!isCalActive) {
+          calendarIcon.click();
+          return false; // need to retry after click renders Day/Week/Month tabs
+        }
+      }
 
-      // Find "Day" button — any clickable element whose full trimmed text is exactly "Day"
-      var dayBtn = allClickable.find(function (el) {
-        var txt = (el.textContent || el.innerText || '').trim();
-        return txt === 'Day' || txt === 'Gün' || txt === 'يوم' || txt === 'Tag' || txt === 'Día';
+      // Step 2: Find "Day" tab among the w-[74px] text switcher buttons
+      var dayBtn = Array.from(document.querySelectorAll('div, span')).find(function (el) {
+        if (el.children.length > 0) return false;
+        var txt = (el.textContent || '').trim();
+        var isDay = txt === 'Day' || txt === 'Gün' || txt === 'يوم' || txt === 'Tag' || txt === 'Día';
+        return isDay && el.offsetParent !== null;
       });
+      if (!dayBtn) return false;
 
-      if (!dayBtn) {
-        // Broader fallback: any small div/span with just "Day" text anywhere in the DOM
-        var all = Array.from(document.querySelectorAll('div, span, li'));
-        dayBtn = all.find(function (el) {
-          if (el.children.length > 0) return false; // leaf nodes only
-          var txt = (el.textContent || '').trim();
-          return txt === 'Day';
-        });
-      }
-
-      if (dayBtn) {
-        // Check it's not already the active view
-        var isActive = dayBtn.classList.contains('bg-boxFocused') ||
-                       dayBtn.classList.contains('text-textItemFocused');
-        if (!isActive) dayBtn.click();
-        sessionStorage.setItem(DAY_VIEW_KEY, '1');
-        return true;
-      }
-      return false;
+      var isActive = dayBtn.classList.contains('bg-boxFocused') ||
+                     dayBtn.classList.contains('text-textItemFocused');
+      if (!isActive) dayBtn.click();
+      return true;
     }
 
-    // Retry with backoff as the page renders asynchronously
+    // Retry up to 30× (every 300ms = up to ~9s) to handle slow React hydration
     if (!trySwitch()) {
       var attempts = 0;
       var retryTimer = setInterval(function () {
         attempts++;
-        if (trySwitch() || attempts > 12) clearInterval(retryTimer);
+        if (trySwitch() || attempts > 30) clearInterval(retryTimer);
       }, 300);
     }
   }

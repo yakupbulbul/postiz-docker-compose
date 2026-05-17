@@ -680,12 +680,20 @@ html, body {
     max-width: 100% !important;
   }
 
-  /* Media library grid — 2 cols on mobile */
-  .grid.grid-cols-4,
-  .grid.grid-cols-5,
-  .grid.grid-cols-6 {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 6px !important;
+  /* Media library — float-left thumbnail items: make them finger-friendly */
+  /* Actual DOM uses float-left, not CSS grid — class: group px-[3px] py-[3px] float-left rounded-[6px] */
+  /* w8-max class sets max-width: 16.67% (~67px) — must override */
+  .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+    width: 140px !important;
+    height: 140px !important;
+    max-width: 140px !important;
+    min-width: 140px !important;
+  }
+  .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] img,
+  .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
   }
 
   /* Media library upload drop zone — large enough to tap */
@@ -698,13 +706,6 @@ html, body {
   [class*="mantine-Modal-content"]:has(video),
   [class*="mantine-Modal-content"]:has(img:not([width="20"])) {
     min-height: 80dvh !important;
-  }
-
-  /* Media items — touch-friendly sizing */
-  .grid.grid-cols-4 > *,
-  .grid.grid-cols-5 > *,
-  .grid.grid-cols-6 > * {
-    min-height: 80px !important;
   }
 }
 
@@ -1378,5 +1379,106 @@ html, body {
     min-width: 0 !important;
     flex: none !important;
     width: 100% !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 29 — Fix media library thumbnails
+   Media uses float-left layout (not CSS grid). Old grid-cols rules
+   inside commit 11 were dead code. New rules target actual DOM class.
+   Also adds landscape, tablet, and calendar card polish.
+   ------------------------------------------------------------ */
+
+/* ------------------------------------------------------------
+   COMMIT 32 — Landscape orientation handling
+   ------------------------------------------------------------ */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Compact bottom nav in landscape — save vertical space */
+  #mobile-bottom-nav {
+    height: 48px !important;
+    padding-bottom: 4px !important;
+  }
+  #mobile-bottom-nav a {
+    font-size: 9px !important;
+    gap: 2px !important;
+  }
+  #mobile-bottom-nav svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  /* FAB — smaller in landscape */
+  #mobile-fab {
+    bottom: 56px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+  /* Compact header */
+  .h-\[50px\], .h-\[56px\] {
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+  /* Hide left sidebar in landscape (bottom nav covers navigation) */
+  #left-menu {
+    display: none !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 33 — Tablet breakpoint (769px–1024px)
+   ------------------------------------------------------------ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  /* Show left sidebar but make it more compact */
+  #left-menu {
+    display: flex !important;
+    width: 60px !important;
+    min-width: 60px !important;
+  }
+  /* Sidebar icon labels — hide text, show icons only */
+  #left-menu span:not([class*="icon"]) {
+    display: none !important;
+  }
+  /* Main content area — allow more space */
+  .flex-1.bg-newBgLineColor,
+  .flex-1.overflow-hidden {
+    padding: 6px !important;
+  }
+  /* Header — reduce horizontal padding */
+  header, [class*="header"], .h-\[50px\].flex {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  /* Calendar — horizontal scroll (same as mobile) */
+  .flex.flex-col.flex-1.overflow-hidden {
+    overflow-x: auto !important;
+  }
+  /* Settings — tighten two-panel layout */
+  .flex.flex-1.gap-\[1px\] {
+    gap: 0 !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 34 — Calendar post card polish
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Calendar cell post cards — readable at 375px */
+  .cursor-pointer.relative.rounded-\[4px\].flex.flex-col {
+    max-height: 56px !important;
+    overflow: hidden !important;
+  }
+  /* Post title in card — 2-line clamp */
+  .cursor-pointer.relative.rounded-\[4px\].flex.flex-col .text-\[12px\],
+  .cursor-pointer.relative.rounded-\[4px\].flex.flex-col .text-\[11px\] {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+  /* Time label in card */
+  .cursor-pointer.relative.rounded-\[4px\].flex.flex-col .text-\[10px\] {
+    font-size: 10px !important;
   }
 }
