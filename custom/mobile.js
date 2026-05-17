@@ -227,8 +227,9 @@
 
   /* ----------------------------------------------------------
      Calendar: auto-switch to Day view on mobile
-     Commit 17 — only fires once per session; won't override
-     a manual view switch by the user.
+     Commit 17/22 — fixed selector (Postiz uses plain divs with
+     class "cursor-pointer w-[74px]", NOT role="tab").
+     Only fires once per session; won't override manual switches.
      ---------------------------------------------------------- */
   var DAY_VIEW_KEY = 'postiz_mobile_day_view_switched';
 
@@ -238,32 +239,48 @@
     // Only once per session
     if (sessionStorage.getItem(DAY_VIEW_KEY)) return;
 
-    // Find the Day view tab/button — try multiple selector strategies
     function trySwitch() {
-      // Strategy 1: role="tab" containing text "Day"
-      var tabs = Array.from(document.querySelectorAll('[role="tab"], button'));
-      var dayBtn = tabs.find(function (el) {
-        var txt = (el.textContent || '').trim();
-        return txt === 'Day' || txt === 'day';
+      // Postiz view switcher: plain divs with class "cursor-pointer w-[74px] text-center rounded-[6px]"
+      // inside container "flex flex-row p-[4px] border border-newTableBorder rounded-[8px]"
+      // Active state class: "text-textItemFocused bg-boxFocused"
+      var allClickable = Array.from(document.querySelectorAll(
+        '.cursor-pointer, [class*="74px"], [class*="newTableBorder"] *'
+      ));
+
+      // Find "Day" button — any clickable element whose full trimmed text is exactly "Day"
+      var dayBtn = allClickable.find(function (el) {
+        var txt = (el.textContent || el.innerText || '').trim();
+        return txt === 'Day' || txt === 'Gün' || txt === 'يوم' || txt === 'Tag' || txt === 'Día';
       });
+
+      if (!dayBtn) {
+        // Broader fallback: any small div/span with just "Day" text anywhere in the DOM
+        var all = Array.from(document.querySelectorAll('div, span, li'));
+        dayBtn = all.find(function (el) {
+          if (el.children.length > 0) return false; // leaf nodes only
+          var txt = (el.textContent || '').trim();
+          return txt === 'Day';
+        });
+      }
+
       if (dayBtn) {
-        var isAlreadyActive = dayBtn.getAttribute('aria-selected') === 'true' ||
-                              dayBtn.getAttribute('data-active') === 'true' ||
-                              dayBtn.classList.contains('active');
-        if (!isAlreadyActive) dayBtn.click();
+        // Check it's not already the active view
+        var isActive = dayBtn.classList.contains('bg-boxFocused') ||
+                       dayBtn.classList.contains('text-textItemFocused');
+        if (!isActive) dayBtn.click();
         sessionStorage.setItem(DAY_VIEW_KEY, '1');
         return true;
       }
       return false;
     }
 
-    // Try immediately, then retry a few times as the page renders
+    // Retry with backoff as the page renders asynchronously
     if (!trySwitch()) {
       var attempts = 0;
       var retryTimer = setInterval(function () {
         attempts++;
-        if (trySwitch() || attempts > 8) clearInterval(retryTimer);
-      }, 250);
+        if (trySwitch() || attempts > 12) clearInterval(retryTimer);
+      }, 300);
     }
   }
 
@@ -287,24 +304,44 @@
     btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
 
     btn.addEventListener('click', function () {
-      // Strategy 1: find a "Create post" / "New post" button and click it
-      var createBtns = Array.from(document.querySelectorAll('button, [role="button"]'));
-      var target = createBtns.find(function (el) {
-        var txt = (el.textContent || el.innerText || '').trim().toLowerCase();
-        return txt === 'create post' || txt === 'new post' || txt === '+ create post' || txt === 'add post';
-      });
-      if (target) {
-        target.click();
+      // Postiz has no standalone "Create post" button in the toolbar.
+      // Posts are created by clicking an empty calendar cell, which opens
+      // the "add-edit-modal". Strategy:
+      // 1. If the create-post overlay (bg-popup) is already open — do nothing.
+      // 2. If on /launches — click the first clickable empty calendar cell.
+      // 3. Otherwise — navigate to /launches (user taps an empty cell there).
+
+      // 1. Already open?
+      if (document.querySelector('.w-full.h-full.fixed.flex.left-0.top-0.bg-popup')) return;
+
+      var dest = prefix + '/launches';
+
+      if (window.location.pathname.indexOf('/launches') === -1) {
+        // 3. Navigate to calendar
+        window.location.href = dest;
         return;
       }
-      // Strategy 2: navigate to launches page where the create button lives
-      var dest = prefix + '/launches';
-      if (window.location.pathname.indexOf('/launches') === -1) {
-        window.location.href = dest;
+
+      // 2. On /launches: find first empty clickable calendar cell.
+      // In day-view these are "relative border-b border-newBorder" rows.
+      // In week/month-view these are cells with cursor-pointer but no post content.
+      var emptyCells = Array.from(document.querySelectorAll(
+        '.cursor-pointer.flex-1, .cursor-pointer[class*="border"], .cursor-pointer.relative'
+      )).filter(function (el) {
+        // Prefer cells that contain no post cards (empty cells)
+        return el.querySelectorAll('[class*="rounded"]').length === 0 &&
+               el.querySelectorAll('img').length === 0;
+      });
+
+      if (emptyCells.length > 0) {
+        emptyCells[0].click();
       } else {
-        // We're already on launches — try clicking the first prominent purple/primary button
-        var primaryBtn = document.querySelector('[class*="bg-primary"], [class*="bg-btnPrimary"], [class*="bg-purple"]');
-        if (primaryBtn) primaryBtn.click();
+        // Absolute fallback: click any cursor-pointer that's a direct child of the calendar grid
+        var any = document.querySelector(
+          '[class*="newBorder"] .cursor-pointer, [class*="newTableBorder"] .cursor-pointer'
+        );
+        if (any) any.click();
+        else window.location.href = dest; // last resort
       }
     });
 
