@@ -3024,3 +3024,56 @@ table {
 .dark #mobile-bottom-nav button.active .nav-label {
   color: #a78bfa !important;
 }
+
+/* ── COMMIT 53 — Header action group: vertical alignment ── */
+
+/*
+ * Problem: moon & bell SVGs sit at the top of their block-level wrappers,
+ * while the flag img lands at the center. Fix: make every direct-child div
+ * a flex row so its content is always vertically centred.
+ * Applies globally (both desktop header and mobile hamburger dropdown).
+ */
+
+/* Outer action wrapper — flex-center everything inside */
+.flex.gap-\[20px\].text-textItemBlur > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* Inner click-handler divs (dark-mode toggle, bell) — also centred */
+.flex.gap-\[20px\].text-textItemBlur > div > div {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Flag circle: lock to a fixed 26 × 26 px touch target */
+.flex.gap-\[20px\].text-textItemBlur > div.rounded-full {
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  min-height: 26px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
+
+/* Flag image: fill the circle, no distortion */
+.flex.gap-\[20px\].text-textItemBlur > div.rounded-full img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Uniform gap between the three actions */
+.flex.gap-\[20px\].text-textItemBlur {
+  gap: 16px !important;
+}
+
+/* Dark-mode dropdown: same treatment */
+.dark .flex.gap-\[20px\].text-textItemBlur {
+  background: #1e1e2e !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
