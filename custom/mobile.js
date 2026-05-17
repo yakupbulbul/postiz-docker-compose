@@ -318,26 +318,26 @@
         return;
       }
 
-      // 2. On /launches: find first empty clickable calendar cell.
-      // In day-view these are "relative border-b border-newBorder" rows.
-      // In week/month-view these are cells with cursor-pointer but no post content.
-      var emptyCells = Array.from(document.querySelectorAll(
-        '.cursor-pointer.flex-1, .cursor-pointer[class*="border"], .cursor-pointer.relative'
+      // 2. On /launches: click the first empty calendar time-slot cell.
+      // Day-view cells: class "min-h-full w-full p-[5px] flex items-center justify-center cursor-pointer"
+      // These open the create-post modal when clicked.
+      var timeSlotCells = Array.from(document.querySelectorAll(
+        '[class*="min-h-full"][class*="cursor-pointer"], .cursor-pointer.min-h-full'
       )).filter(function (el) {
-        // Prefer cells that contain no post cards (empty cells)
-        return el.querySelectorAll('[class*="rounded"]').length === 0 &&
-               el.querySelectorAll('img').length === 0;
+        // Must be a visible, reasonably large cell (time-slot, not a tiny icon)
+        return el.offsetHeight > 40 && el.offsetWidth > 100 && el.offsetParent !== null;
       });
 
-      if (emptyCells.length > 0) {
-        emptyCells[0].click();
+      if (timeSlotCells.length > 0) {
+        timeSlotCells[0].click();
       } else {
-        // Absolute fallback: click any cursor-pointer that's a direct child of the calendar grid
-        var any = document.querySelector(
-          '[class*="newBorder"] .cursor-pointer, [class*="newTableBorder"] .cursor-pointer'
-        );
+        // Fallback: any clickable element with large dimensions (week/month view cells)
+        var any = Array.from(document.querySelectorAll('.cursor-pointer')).find(function (el) {
+          return el.offsetHeight > 60 && el.offsetWidth > 60 && el.offsetParent !== null &&
+                 el.querySelectorAll('img').length === 0;
+        });
         if (any) any.click();
-        else window.location.href = dest; // last resort
+        else window.location.href = dest;
       }
     });
 
