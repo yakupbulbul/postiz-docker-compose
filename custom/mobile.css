@@ -2246,3 +2246,513 @@ html, body {
     max-height: 35vh !important;
   }
 }
+
+/* ============================================================
+   FLUID RESPONSIVE SYSTEM — Commit 48
+   Replaces all hard-coded pixel rules with a content-driven,
+   fluid layout system. Works at any screen width, not just
+   specific device presets.
+
+   Principles:
+   - clamp() for all sizing (typography, spacing, components)
+   - CSS Grid auto-fill/minmax for responsive grids
+   - min-width: 0 everywhere flex children could overflow
+   - No device-specific pixel rules
+   - Mobile-first foundations, desktop stays clean
+   ============================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS  (custom properties — override px constants)
+   ────────────────────────────────────────────────────────────── */
+:root {
+  /* Fluid spacing — scales between small phone and wide desktop */
+  --sp-2xs : clamp(2px,  0.5vw, 4px);
+  --sp-xs  : clamp(4px,  1vw,   8px);
+  --sp-sm  : clamp(6px,  1.5vw, 12px);
+  --sp-md  : clamp(10px, 2.5vw, 18px);
+  --sp-lg  : clamp(14px, 3.5vw, 24px);
+  --sp-xl  : clamp(18px, 4.5vw, 32px);
+
+  /* Fluid typography */
+  --fs-2xs : clamp(9px,  2.2vw, 11px);
+  --fs-xs  : clamp(10px, 2.5vw, 13px);
+  --fs-sm  : clamp(12px, 3vw,   15px);
+  --fs-base: clamp(13px, 3.3vw, 16px);
+  --fs-lg  : clamp(15px, 4vw,   20px);
+  --fs-xl  : clamp(18px, 5vw,   26px);
+  --fs-2xl : clamp(20px, 6vw,   32px);
+
+  /* UI component sizing */
+  --nav-height    : clamp(52px, 9vw, 68px);
+  --header-height : clamp(50px, 8.5vw, 68px);
+  --touch-min     : clamp(40px, 10vw, 52px);
+  --fab-size      : clamp(48px, 12.5vw, 60px);
+  --icon-nav      : clamp(18px, 4.8vw, 24px);
+  --radius-sm     : clamp(4px,  1.2vw, 8px);
+  --radius-md     : clamp(8px,  2vw,   14px);
+  --radius-lg     : clamp(10px, 2.8vw, 20px);
+
+  /* Content padding — shrinks on narrow, expands on wide */
+  --content-px    : clamp(8px, 3vw, 20px);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. GLOBAL OVERFLOW & BOX-SIZING GUARD
+   Prevents accidental horizontal scroll at every width.
+   ────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* All media & embeds are capped at container width */
+img, video, svg, canvas, iframe, embed, object {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Flex children that could cause overflow */
+[class*="flex"] > * {
+  min-width: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. FLUID BOTTOM NAV  (replaces hard-coded 58px / 62px)
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #mobile-bottom-nav {
+    height: var(--nav-height) !important;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--sp-xs)) !important;
+  }
+
+  #mobile-bottom-nav a,
+  #mobile-bottom-nav button {
+    font-size: var(--fs-2xs) !important;
+    gap: var(--sp-2xs) !important;
+    min-height: var(--touch-min) !important;
+  }
+
+  #mobile-bottom-nav svg {
+    width: var(--icon-nav) !important;
+    height: var(--icon-nav) !important;
+  }
+
+  /* Content area bottom padding adjusts to nav height */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\] {
+    padding-bottom: calc(var(--nav-height) + var(--sp-sm) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. FLUID FAB
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #mobile-fab {
+    width:  var(--fab-size) !important;
+    height: var(--fab-size) !important;
+    bottom: calc(var(--nav-height) + var(--sp-md) + env(safe-area-inset-bottom, 0px)) !important;
+    right: var(--sp-lg) !important;
+  }
+
+  #mobile-fab svg {
+    width:  calc(var(--fab-size) * 0.46) !important;
+    height: calc(var(--fab-size) * 0.46) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. FLUID HEADER
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Header bar height */
+  .h-\[80px\].flex.bg-newBgColorInner,
+  header.flex.bg-newBgColorInner {
+    height: var(--header-height) !important;
+    min-height: var(--header-height) !important;
+    padding-left: var(--content-px) !important;
+    padding-right: var(--content-px) !important;
+  }
+
+  /* Page title — fluid size */
+  .text-\[24px\].font-\[600\],
+  .text-\[24px\].font-\[700\] {
+    font-size: var(--fs-xl) !important;
+    letter-spacing: -0.02em !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. FLUID TYPOGRAPHY  (all breakpoints, not just mobile)
+   ────────────────────────────────────────────────────────────── */
+
+/* Headings */
+h1 { font-size: var(--fs-2xl) !important; }
+h2 { font-size: var(--fs-xl)  !important; }
+h3 { font-size: var(--fs-lg)  !important; }
+
+/* Body text clamp — readable at 320px, not too big at 1400px */
+@media (max-width: 900px) {
+  p, li, td, th, label, span:not([class*="text-["]) {
+    font-size: var(--fs-base) !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Small labels and timestamps */
+  .text-\[12px\], .text-\[11px\], .text-\[10px\] {
+    font-size: var(--fs-xs) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. FLUID MEDIA LIBRARY GRID
+   Uses CSS Grid auto-fill so it works at every width:
+   - 320px  → 2 columns (~140px each)
+   - 480px  → 3 columns
+   - 768px  → 4 columns
+   - 1024px → 5-6 columns
+   No breakpoints needed — layout adapts to container width.
+   ────────────────────────────────────────────────────────────── */
+
+/* Wrapper: switch to CSS Grid */
+.p-\[10px\].flex.flex-wrap {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(130px, 44%), 1fr)) !important;
+  gap: clamp(3px, 1.2vw, 8px) !important;
+  padding: clamp(4px, 1.5vw, 10px) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Each media item fills its grid cell */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  float: none !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Inner image/thumb — square aspect, fills cell */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] img,
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] video {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: var(--radius-sm) !important;
+  display: block !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   8. FLUID CONTENT PADDING  (inner page containers)
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Main page inner padding */
+  .flex-1.flex.flex-col.p-\[20px\],
+  .flex-1.flex.flex-col.p-\[24px\],
+  .flex-1.overflow-y-auto.p-\[20px\],
+  .flex-1.overflow-y-auto.p-\[24px\] {
+    padding: var(--sp-md) var(--content-px) !important;
+  }
+
+  /* Cards */
+  .bg-third.rounded-\[12px\].p-\[20px\],
+  .rounded-\[12px\].p-\[20px\],
+  .rounded-\[12px\].p-\[24px\] {
+    padding: var(--sp-md) !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  /* Settings sidebar nav items */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all > * {
+    padding: var(--sp-xs) var(--sp-md) !important;
+    border-radius: var(--radius-lg) !important;
+    font-size: var(--fs-sm) !important;
+    min-height: var(--touch-min) !important;
+    height: auto !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. FLUID ANALYTICS GRID
+   Stats cards: auto-fill, min 140px per card, no breakpoint needed
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Recharts container: max-width prevents overflow */
+  .recharts-responsive-container,
+  .recharts-wrapper {
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Stat card grids */
+  .grid.grid-cols-4,
+  .grid.grid-cols-3 {
+    grid-template-columns: repeat(auto-fill, minmax(min(140px, 45%), 1fr)) !important;
+    gap: var(--sp-sm) !important;
+  }
+
+  /* Time range select: never full width */
+  select.w-full,
+  select[class*="w-full"] {
+    width: auto !important;
+    max-width: min(180px, 50%) !important;
+    font-size: var(--fs-sm) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   10. FLUID CALENDAR TOOLBAR
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Toolbar: let it wrap naturally, don't force fixed widths */
+  .text-textColor.flex.flex-col.items-center.select-none {
+    gap: var(--sp-xs) !important;
+    padding: var(--sp-xs) 0 !important;
+  }
+
+  /* Date navigation buttons */
+  .text-textColor.flex.flex-col.items-center.select-none button,
+  .text-textColor.flex.flex-col.items-center.select-none [role="button"] {
+    min-height: var(--touch-min) !important;
+    padding: var(--sp-xs) var(--sp-sm) !important;
+    font-size: var(--fs-sm) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   11. PREVENT HORIZONTAL OVERFLOW — aggressive guard
+   Applied at ALL widths to prevent any element causing scroll.
+   ────────────────────────────────────────────────────────────── */
+
+/* Tables can overflow — add horizontal scroll container */
+table {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* Long unbreakable text */
+[class*="text-"] {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Fixed-width Tailwind classes that can overflow container */
+@media (max-width: 480px) {
+  /* Very narrow: clamp the fixed widths Tailwind sets */
+  [class*="w-[300px]"], [class*="w-[320px]"], [class*="w-[350px]"],
+  [class*="w-[400px]"], [class*="w-[450px]"], [class*="w-[500px]"],
+  [class*="w-[600px]"], [class*="w-[700px]"], [class*="w-[800px]"] {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  [class*="min-w-[200px]"], [class*="min-w-[250px]"], [class*="min-w-[300px]"] {
+    min-width: 0 !important;
+  }
+}
+
+/* Modals / sheets: never wider than viewport */
+[class*="mantine-Modal-content"],
+[class*="mantine-Drawer-content"],
+.w-\[580px\].flex.flex-col {
+  max-width: min(580px, 100vw) !important;
+  width: 100% !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   12. FLUID FORM CONTROLS  (scales across all widths)
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Inputs and textareas: full container width, fluid height */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  textarea {
+    width: 100% !important;
+    min-height: var(--touch-min) !important;
+    font-size: var(--fs-base) !important;
+    padding: var(--sp-xs) var(--sp-sm) !important;
+    border-radius: var(--radius-sm) !important;
+  }
+
+  /* Buttons: fluid touch targets */
+  button,
+  [role="button"] {
+    min-height: var(--touch-min) !important;
+    font-size: var(--fs-sm) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   13. TABLET (600–1024px) — fluid sidebar, not hidden
+   At tablet widths keep the sidebar but let it be fluid.
+   ────────────────────────────────────────────────────────────── */
+@media (min-width: 600px) and (max-width: 1024px) {
+  /* Sidebar: shrink but remain visible */
+  #left-menu,
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] {
+    display: flex !important;
+    width: clamp(60px, 8vw, 80px) !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide bottom nav at tablet — sidebar takes over */
+  #mobile-bottom-nav {
+    display: none !important;
+  }
+
+  #mobile-fab {
+    display: none !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   14. SAFE LANDSCAPE  (short viewports at any width)
+   ────────────────────────────────────────────────────────────── */
+@media (max-height: 480px) and (orientation: landscape) {
+  #mobile-bottom-nav {
+    height: clamp(40px, 8vh, 52px) !important;
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 2px) !important;
+  }
+
+  #mobile-bottom-nav a,
+  #mobile-bottom-nav button {
+    font-size: clamp(8px, 2vw, 10px) !important;
+  }
+
+  #mobile-fab {
+    width:  clamp(40px, 9vw, 48px) !important;
+    height: clamp(40px, 9vw, 48px) !important;
+    bottom: calc(clamp(40px, 8vh, 52px) + 8px) !important;
+  }
+
+  /* Reclaim vertical space */
+  .h-\[80px\].flex.bg-newBgColorInner {
+    height: clamp(38px, 7vh, 48px) !important;
+    min-height: 0 !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   15. DESKTOP STABILITY  (≥ 1025px)
+   Ensure our mobile rules don't leak into desktop view.
+   ────────────────────────────────────────────────────────────── */
+@media (min-width: 1025px) {
+  /* Mobile nav should never show on desktop */
+  #mobile-bottom-nav,
+  #mobile-fab {
+    display: none !important;
+  }
+
+  /* Restore left sidebar */
+  #left-menu,
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] {
+    display: flex !important;
+  }
+
+  /* Media grid — more columns on desktop */
+  .p-\[10px\].flex.flex-wrap {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 4px !important;
+  }
+
+  /* Restore content area padding */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\] {
+    padding-bottom: 0 !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   16. SAFE-AREA PADDING  (notch / home-bar / dynamic island)
+   Applied using logical properties so it works in all orientations.
+   ────────────────────────────────────────────────────────────── */
+@supports (padding: max(0px)) {
+  #mobile-bottom-nav {
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--sp-xs)) !important;
+  }
+
+  #mobile-fab {
+    bottom: max(
+      calc(var(--nav-height) + var(--sp-md)),
+      calc(var(--nav-height) + var(--sp-md) + env(safe-area-inset-bottom, 0px))
+    ) !important;
+  }
+
+  /* Page content: left/right safe areas for foldables / landscape notch */
+  body {
+    padding-left:  env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 48b — Media grid: correct container selector
+   Actual parent of media items is .withp3 (absolute positioned)
+   not .p-[10px].flex.flex-wrap. Apply CSS Grid to the real container.
+   ────────────────────────────────────────────────────────────── */
+
+/* The actual media scroll container */
+[class*="withp3"],
+.absolute.-left-\[3px\].-top-\[3px\] {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(130px, 44%), 1fr)) !important;
+  gap: clamp(3px, 1.2vw, 8px) !important;
+  align-content: start !important;
+  /* Keep original absolute/overflow behavior */
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: clamp(3px, 1vw, 6px) !important;
+  box-sizing: border-box !important;
+}
+
+/* Items become grid cells — width/height driven by grid */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  float: none !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Inner image/video: square, fills grid cell */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] > *:first-child,
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] img,
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] video,
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] [class*="aspect"] {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover !important;
+  border-radius: var(--radius-sm, clamp(4px, 1.2vw, 8px)) !important;
+  display: block !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* On desktop: more columns, tighter cells */
+@media (min-width: 1025px) {
+  [class*="withp3"] {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+    gap: 4px !important;
+  }
+}
