@@ -222,13 +222,7 @@
   var calObserver = new MutationObserver(function () {
     // Debounce slightly so we don't run on every single DOM mutation
     clearTimeout(calObserver._t);
-    calObserver._t = setTimeout(function () {
-      abbreviateDayNames();
-      // Re-attach header menu button if React re-rendered the header
-      if (isMobile && !document.getElementById('mobile-header-menu-btn')) {
-        buildHeaderMenu();
-      }
-    }, 80);
+    calObserver._t = setTimeout(abbreviateDayNames, 80);
   });
 
   /* ----------------------------------------------------------
@@ -351,56 +345,17 @@
   }
 
   /* ----------------------------------------------------------
-     Header overflow menu — replaces moon/flag/bell with a ⋮ button
+     Header utility icons — moon / flag / bell now live in the
+     bottom nav bar (right side), always visible. No hamburger
+     needed. Just clean up any leftover buttons from old commits.
      ---------------------------------------------------------- */
   function buildHeaderMenu() {
     if (!isMobile) return;
-    if (document.getElementById('mobile-header-menu-btn')) return;
-
-    var controls = document.querySelector('.flex.gap-\\[20px\\].text-textItemBlur');
-    if (!controls) return;
-
-    /* Backdrop (transparent — closes menu on outside tap) */
-    var backdrop = document.createElement('div');
-    backdrop.id = 'mobile-header-backdrop';
-    document.body.appendChild(backdrop);
-
-    /* ☰ hamburger toggle button */
-    var btn = document.createElement('button');
-    btn.id = 'mobile-header-menu-btn';
-    btn.setAttribute('aria-label', 'Menu');
-    btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">'
-      + '<line x1="3" y1="6"  x2="21" y2="6"/>'
-      + '<line x1="3" y1="12" x2="21" y2="12"/>'
-      + '<line x1="3" y1="18" x2="21" y2="18"/>'
-      + '</svg>';
-
-    /* Insert button at the end of the header bar */
-    var header = controls.closest('.flex.bg-newBgColorInner') || controls.parentElement;
-    if (header) header.appendChild(btn);
-
-    function openMenu() {
-      controls.classList.add('header-menu-open');
-      backdrop.classList.add('open');
-      btn.classList.add('open');
-    }
-    function closeMenu() {
-      controls.classList.remove('header-menu-open');
-      backdrop.classList.remove('open');
-      btn.classList.remove('open');
-    }
-
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      controls.classList.contains('header-menu-open') ? closeMenu() : openMenu();
-    });
-
-    backdrop.addEventListener('click', closeMenu);
-
-    /* Close on nav (page change removes & re-adds controls) */
-    document.addEventListener('click', function (e) {
-      if (!controls.contains(e.target) && e.target !== btn) closeMenu();
-    });
+    /* Remove any old hamburger / backdrop from previous builds */
+    var oldBtn = document.getElementById('mobile-header-menu-btn');
+    var oldBackdrop = document.getElementById('mobile-header-backdrop');
+    if (oldBtn) oldBtn.remove();
+    if (oldBackdrop) oldBackdrop.remove();
   }
 
   function init() {
