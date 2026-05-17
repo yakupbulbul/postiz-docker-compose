@@ -1731,12 +1731,12 @@ html, body {
 @media (max-width: 768px) {
   /* ── Channel selector: single horizontal scroll row ── */
 
-  /* The grid container holding channel circles */
-  .grid.grid-cols-2.gap-\[8px\],
-  .grid.grid-cols-3.gap-\[8px\],
-  .grid.grid-cols-2.gap-\[10px\],
-  .grid.grid-cols-3.gap-\[10px\] {
-    /* Only target channel-picker grids by proximity to channel labels */
+  /* The grid container holding channel circles (inside modals only) */
+  /* Scoped to .fixed parent to avoid breaking Analytics stat card grids */
+  .fixed .grid.grid-cols-2.gap-\[8px\],
+  .fixed .grid.grid-cols-3.gap-\[8px\],
+  .fixed .grid.grid-cols-2.gap-\[10px\],
+  .fixed .grid.grid-cols-3.gap-\[10px\] {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
@@ -2750,11 +2750,13 @@ table {
   max-width: 100% !important;
 }
 
-/* On desktop: more columns, tighter cells */
+/* On desktop: larger media cards with proper spacing */
 @media (min-width: 1025px) {
-  [class*="withp3"] {
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
-    gap: 4px !important;
+  [class*="withp3"],
+  .absolute.-left-\[3px\].-top-\[3px\] {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 16px !important;
+    padding: 20px !important;
   }
 }
 
@@ -3818,6 +3820,12 @@ table {
     border-radius: 8px !important;
   }
 
+  /* Analytics stat cards: polished appearance */
+  .grid.grid-cols-3 > div {
+    border-radius: 12px !important;
+    padding: 20px !important;
+  }
+
   /* Metric card: bigger number display */
   .grid.grid-cols-3 > div .text-\[40px\],
   .grid.grid-cols-3 > div [class*="text-[40"] {
@@ -3828,25 +3836,36 @@ table {
 
   /* ── 6. MEDIA PAGE ── */
 
-  /* Media grid: auto-fill with minimum 150px cards, no fixed column count */
+  /* Media grid: auto-fill with larger minimum cards */
   [class*="withp3"] {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
-    gap: 8px !important;
-    padding: 16px !important;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 16px !important;
+    padding: 20px !important;
   }
 
-  /* Search + Upload bar: don't stretch to full width unnecessarily */
+  /* Media card items: bigger, rounded, with aspect ratio */
+  [class*="withp3"] > div {
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    min-height: 200px !important;
+  }
+
+  /* Search + Upload bar: full width with proper alignment */
   .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\] > div:first-child {
-    max-width: 600px !important;
+    max-width: 100% !important;
   }
 
   /* ── 7. CALENDAR PAGE ── */
 
-  /* Calendar toolbar: single row, no wrap */
+  /* Calendar toolbar: single row, no wrap + "Today" text fix */
   .flex.flex-wrap.items-center.gap-\[10px\] {
     flex-wrap: nowrap !important;
     gap: 8px !important;
+  }
+  .flex.flex-wrap.items-center.gap-\[10px\] > * {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
 
   /* Calendar date navigation: more breathing room */
@@ -3854,10 +3873,18 @@ table {
     gap: 6px !important;
   }
 
-  /* Calendar post thumbnails: slightly larger on desktop */
-  .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+  /* Calendar post thumbnails: slightly larger on desktop (NOT media page) */
+  :not([class*="withp3"]) > .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
     width: 56px !important;
     height: 56px !important;
+  }
+
+  /* Media page items: fill the grid cell */
+  [class*="withp3"] > .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 12px !important;
   }
 
   /* ── 8. GENERAL DESKTOP CARD RHYTHM ── */

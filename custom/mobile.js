@@ -73,10 +73,32 @@
   }
 
   /* ----------------------------------------------------------
+     Auth-page detection helper
+     ---------------------------------------------------------- */
+  function isAuthPage() {
+    return /^\/(login|register|auth)(\/|$)/.test(window.location.pathname);
+  }
+
+  /* Hide/show bottom nav + FAB when navigating to/from auth pages */
+  function handleAuthNavVisibility() {
+    if (!isMobile) return;
+    var nav = document.getElementById('mobile-bottom-nav');
+    var fab = document.getElementById('mobile-fab');
+    if (isAuthPage()) {
+      if (nav) nav.remove();
+      if (fab) fab.remove();
+    } else {
+      if (!nav) buildNav();
+      if (!fab) buildFab();
+    }
+  }
+
+  /* ----------------------------------------------------------
      Build + inject the bottom nav bar
      ---------------------------------------------------------- */
   function buildNav() {
     if (!isMobile) return;
+    if (isAuthPage()) return;
     var existing = document.getElementById('mobile-bottom-nav');
     if (existing) existing.remove();
 
@@ -151,12 +173,12 @@
 
     history.pushState = function () {
       origPush.apply(history, arguments);
-      setTimeout(function () { updateActive(); buildFab(); setTimeout(switchToDayView, 400); }, 50);
+      setTimeout(function () { updateActive(); buildFab(); handleAuthNavVisibility(); }, 50);
     };
 
     history.replaceState = function () {
       origReplace.apply(history, arguments);
-      setTimeout(function () { updateActive(); buildFab(); setTimeout(switchToDayView, 400); }, 50);
+      setTimeout(function () { updateActive(); buildFab(); handleAuthNavVisibility(); }, 50);
     };
   })();
 
@@ -242,7 +264,8 @@
      2. Then click "Day" tab (w-[74px] button group)
      Retry up to 30× to handle slow React hydration */
   function switchToDayView() {
-    // Only on /launches route
+    // Only on mobile + only on /launches route
+    if (!isMobile) return;
     if (getActivePath().indexOf('/launches') !== 0) return;
 
     function trySwitch() {
