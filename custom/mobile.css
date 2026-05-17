@@ -3077,3 +3077,422 @@ table {
   background: #1e1e2e !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   COMMIT 54 — Comprehensive mobile polish: calendar toolbar,
+   media grid placeholders, global spacing, content safe-area,
+   desktop layout, and FAB positioning.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   54a — Calendar toolbar: fix date truncation + compact 1-row layout
+   
+   DOM structure:
+   .text-textColor.flex.flex-col.md:flex-row.gap-[8px].items-center.select-none
+     ├── .flex.flex-grow.flex-row.items-center.gap-[10px]   (date nav row)
+     │     ├── .border.h-[42px].border-newTableBorder.bg-newTableBorder  (< date >)
+     │     │     ├── < arrow (prev)
+     │     │     ├── .min-w-[200px].text-center  (date text)
+     │     │     └── > arrow (next)
+     │     └── .flex-1.text-[14px].font-[500]  (Today wrapper)
+     ├── .flex.flex-row.p-[4px].border ... (Day/Week/Month)
+     └── .flex.flex-row.p-[4px].border ... (cal/list icons)
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Toolbar wrapper: compress vertical gap, add horizontal padding */
+  .text-textColor.flex.flex-col.items-center.select-none,
+  .text-textColor.flex.flex-col.md\:flex-row.gap-\[8px\].items-center.select-none {
+    gap: 4px !important;
+    padding: var(--sp-sm, 8px) var(--content-px, 12px) !important;
+    align-items: stretch !important;
+  }
+
+  /* Row 1: date nav - make it full-width flex row */
+  .flex.flex-grow.flex-row.items-center.gap-\[10px\] {
+    flex-grow: 1 !important;
+    width: 100% !important;
+    gap: 6px !important;
+  }
+
+  /* The outer date nav container (< date >) - allow it to shrink */
+  .border.h-\[42px\].border-newTableBorder.bg-newTableBorder.gap-\[1px\].flex.items-center.rounded-\[8px\].overflow-hidden {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 90px) !important;
+  }
+
+  /* Date text div — allow it to shrink, use ellipsis, smaller font */
+  .min-w-\[200px\].text-center.bg-newBgColorInner.h-full.flex.items-center.justify-center {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding: 0 4px !important;
+  }
+
+  /* Arrow buttons - keep compact */
+  .border.h-\[42px\].border-newTableBorder.bg-newTableBorder.gap-\[1px\].flex.items-center.rounded-\[8px\].overflow-hidden
+  > div:first-child,
+  .border.h-\[42px\].border-newTableBorder.bg-newTableBorder.gap-\[1px\].flex.items-center.rounded-\[8px\].overflow-hidden
+  > div:last-child {
+    flex-shrink: 0 !important;
+    width: 32px !important;
+    padding: 0 !important;
+  }
+
+  /* Today button wrapper — don't let it grow, keep it tight */
+  .flex-1.text-\[14px\].font-\[500\] {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* Today button itself */
+  .hover\:text-textItemFocused.hover\:bg-boxFocused.py-\[3px\].px-\[9px\].flex.justify-center.items-center.rounded-\[8px\].transition-all.cursor-pointer {
+    padding: 4px 10px !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    white-space: nowrap !important;
+  }
+
+  /* Row 2: Day/Week/Month + icons - keep them on same row */
+  /* Day/Week/Month container */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\].text-\[14px\].font-\[500\] {
+    padding: 2px !important;
+    gap: 0 !important;
+  }
+
+  /* Individual Day/Week/Month buttons */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\] {
+    width: auto !important;
+    min-width: 44px !important;
+    padding: 4px 8px !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+  }
+
+  /* Active Day/Week/Month button — clear purple highlight */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\].text-textItemFocused.bg-boxFocused {
+    background: rgba(124, 58, 237, 0.12) !important;
+    color: #7c3aed !important;
+    font-weight: 600 !important;
+  }
+
+  /* Calendar/list icon toggle container */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\].text-\[14px\].font-\[500\]:has(svg) {
+    padding: 2px !important;
+  }
+
+  /* Calendar/list icon toggle buttons */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.flex.justify-center.items-center.w-\[34px\] {
+    width: 30px !important;
+    padding: 4px !important;
+  }
+
+  /* Second row wrapper: day/week/month + icons side by side */
+  .text-textColor.flex.flex-col.items-center.select-none > *:not(:first-child),
+  .text-textColor.flex.flex-col.md\:flex-row.gap-\[8px\].items-center.select-none > *:not(:first-child) {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54b — Media grid: video placeholder + constrain item height
+   
+   Videos with readyState=0 render as invisible blank boxes.
+   Add a visible placeholder background so cells don't look empty.
+   ────────────────────────────────────────────────────────────── */
+
+/* Video elements that haven't loaded: show a dark placeholder with play icon */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] video {
+  background: #1a1a2e !important;
+  min-height: 80px !important;
+}
+
+/* The inner wrapper div — ensure it's positioned for the overlay */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] .w-full.h-full.rounded-\[6px\].border-\[4px\].relative {
+  position: relative !important;
+  background: #f0f0f5 !important;
+  border-radius: var(--radius-sm, 6px) !important;
+  overflow: hidden !important;
+}
+
+/* Video placeholder — pseudo via container background pattern */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\]:has(video) .w-full.h-full.rounded-\[6px\].border-\[4px\].relative {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d4e 100%) !important;
+}
+
+/* Ensure video fills its container */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: var(--radius-sm, 4px) !important;
+  display: block !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+/* Filename label — overlay at bottom of the grid cell (not below it) */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] .absolute.bottom-\[10px\].end-\[10px\].z-\[100\] {
+  position: absolute !important;
+  bottom: 6px !important;
+  left: 4px !important;
+  right: 4px !important;
+  end: auto !important;
+  inset-inline-end: 4px !important;
+  font-size: clamp(9px, 2.2vw, 11px) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  color: #fff !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54c — Global spacing & typography polish
+   
+   Page titles: bold, large. Cards: subtle borders, less wasted padding.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Page title in mobile header */
+  #mobile-page-title {
+    font-size: clamp(20px, 5vw, 26px) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Content area bottom padding — prevent overlap with nav */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden.flex {
+    padding-bottom: calc(var(--nav-height, 60px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Inner content scroll areas — keep padding from nav */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] {
+    padding-bottom: calc(var(--nav-height, 60px) + env(safe-area-inset-bottom, 0px) + var(--sp-md, 12px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54d — Content safe-area: prevent nav bar overlap
+   
+   The main scroll containers need bottom padding to account for
+   the fixed bottom nav bar height + safe area insets.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Main page content wrapper — has the calendar, media, etc. */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden.flex.flex-col.gap-\[1px\] {
+    margin-bottom: calc(var(--nav-height, 58px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Scrollable content: ensure it doesn't go under the FAB */
+  [class*="overflow-y-auto"]:not(#mobile-bottom-nav):not([class*="withp3"]) {
+    scroll-padding-bottom: calc(var(--nav-height, 58px) + var(--sp-lg, 20px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54e — FAB positioning: above nav bar
+   
+   Ensure FAB (+ button) is above the nav and not overlapping it.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #mobile-fab {
+    bottom: calc(var(--nav-height, 58px) + var(--sp-md, 12px) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54f — Desktop layout: max-width + centered content
+   
+   On wide screens, cap content width for readability.
+   ────────────────────────────────────────────────────────────── */
+@media (min-width: 1200px) {
+  /* Settings cards: cap width for readability */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col {
+    max-width: 800px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54g — Settings nav: ensure Logout button is accessible
+   
+   Make sure "Logout from Postiz" pill is never cut off.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Ensure scroll extends to show last item */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\] {
+    padding-inline-end: var(--sp-md, 12px) !important;
+  }
+
+  /* Ensure the scroll container has enough end padding */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\]::after {
+    content: '' !important;
+    display: inline-block !important;
+    min-width: var(--sp-md, 12px) !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   54h — Create Post: sticky action bar above nav
+   
+   The publish/draft/schedule buttons should be sticky at bottom
+   and not overlap the bottom nav bar.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Sticky action bar */
+  .sticky.bottom-0.z-\[100\] {
+    bottom: calc(var(--nav-height, 58px) + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+    background: #ffffff !important;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06) !important;
+    padding: var(--sp-sm, 8px) var(--content-px, 12px) !important;
+    padding-bottom: calc(var(--sp-sm, 8px) + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 100 !important;
+  }
+
+  .dark .sticky.bottom-0.z-\[100\] {
+    background: #1a1919 !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 54 PATCH — Fix calendar date text + Day/Week/Month overflow
+   
+   On mobile, the date text sits in .py-[3px].px-[9px].rounded-[5px]
+   (not .min-w-[200px]) and Day/Week/Month buttons need more width.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Date inner button: allow text to show, smaller font */
+  .py-\[3px\].px-\[9px\].rounded-\[5px\].transition-all.text-\[14px\] {
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    padding: 3px 6px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* The .min-w-[200px] container: ensure it can expand */
+  .min-w-\[200px\].text-center.bg-newBgColorInner.h-full.flex.items-center.justify-center {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: visible !important;
+  }
+
+  /* The outer date nav container: remove overflow:hidden so date shows */
+  .border.h-\[42px\].border-newTableBorder.bg-newTableBorder.gap-\[1px\].flex.items-center.rounded-\[8px\].overflow-hidden {
+    overflow: visible !important;
+    border-radius: var(--radius-sm, 6px) !important;
+  }
+
+  /* Day/Week/Month: use flex: 1 so they distribute evenly */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\].text-\[14px\].font-\[500\] {
+    display: flex !important;
+    align-items: stretch !important;
+    width: auto !important;
+  }
+
+  /* Day/Week/Month individual buttons: flex-1, no fixed width */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\] {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 38px !important;
+    padding: 4px 6px !important;
+    font-size: clamp(11px, 2.8vw, 13px) !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 54 PATCH 2 — Fix Day/Week/Month overflow clipping
+   
+   The view container has overflow:hidden and 120px width.
+   3 buttons × 38px = 114px, plus 2×2px padding = 118px, but
+   Month's trailing edge is still clipped. Force overflow:visible.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* View switcher (Day/Week/Month) container: allow overflow */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\].text-\[14px\].font-\[500\] {
+    overflow: visible !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Also fix the icon toggle container */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\].text-\[14px\].font-\[500\] ~ .flex.flex-row.p-\[4px\].border {
+    overflow: visible !important;
+  }
+
+  /* Toolbar: let the second row flex-wrap if needed */
+  .text-textColor.flex.flex-col.items-center.select-none > *:nth-child(2),
+  .text-textColor.flex.flex-col.md\:flex-row.gap-\[8px\].items-center.select-none > *:nth-child(2),
+  .text-textColor.flex.flex-col.items-center.select-none > *:nth-child(3),
+  .text-textColor.flex.flex-col.md\:flex-row.gap-\[8px\].items-center.select-none > *:nth-child(3) {
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Remove the erroneous margin-bottom on the main content box that creates gray space */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden.flex.flex-col.gap-\[1px\] {
+    margin-bottom: 0 !important;
+  }
+
+  /* Instead, give the inner scrollable area padding-bottom */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\],
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col {
+    padding-bottom: calc(var(--nav-height, 58px) + env(safe-area-inset-bottom, 0px) + var(--sp-sm, 8px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 54 PATCH 3 — Media page: fix content centering
+   
+   The media page main column uses align-items:center which causes
+   children (including the grid) to be centered at their natural width
+   instead of stretching full-width.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Fix the main content area: stretch children full-width */
+  .relative.flex.flex-col.flex-1 {
+    align-items: stretch !important;
+  }
+
+  /* The withp3 grid container needs to respect the full-width parent */
+  [class*="withp3"] {
+    width: calc(100% + 6px) !important;
+    max-width: calc(100% + 6px) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 54 PATCH 4 — Media/content pages: force full-width children
+   
+   The .relative.flex.flex-col.flex-1 container uses align-items:center
+   which prevents children from stretching full-width. Override with
+   !important and also force children to width:100%.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Force full-width stretch for the main content column */
+  .relative.flex.flex-col.flex-1 {
+    align-items: stretch !important;
+  }
+
+  /* Force the content child full-width */
+  .relative.flex.flex-col.flex-1 > .flex.flex-col.flex-1,
+  .relative.flex.flex-col.flex-1 > .flex.flex-col.gap-\[15px\] {
+    width: 100% !important;
+    max-width: 100% !important;
+    align-self: stretch !important;
+  }
+}
