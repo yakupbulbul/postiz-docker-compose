@@ -947,3 +947,63 @@ html, body {
     overflow-wrap: normal !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 16 — Floating Action Button (FAB): Create Post
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* FAB button — injected by mobile.js */
+  #mobile-fab {
+    position: fixed;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: 18px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #7c3aed;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.45), 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+
+  #mobile-fab svg {
+    width: 26px;
+    height: 26px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  #mobile-fab:active {
+    transform: scale(0.9);
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35);
+  }
+
+  /* Entrance animation */
+  #mobile-fab {
+    animation: fab-in 0.25s ease both;
+  }
+
+  @keyframes fab-in {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  /* Hide FAB when create-post overlay is open */
+  body:has(.w-full.h-full.fixed.flex.left-0.top-0.bg-popup) #mobile-fab,
+  body:has([class*="mantine-Modal-root"][data-opened="true"]) #mobile-fab {
+    display: none !important;
+  }
+
+  /* Hide on auth/login pages */
+  body:has([class*="login"]) #mobile-fab,
+  body:has([class*="register"]) #mobile-fab {
+    display: none !important;
+  }
+}
