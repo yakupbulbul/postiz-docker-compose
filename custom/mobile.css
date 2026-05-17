@@ -2756,3 +2756,72 @@ table {
     gap: 4px !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 49 — Settings inner nav: make items row (horizontal scroll)
+   Outer sidebar is already flex-row (commit 46), but the inner
+   .flex.flex-1.flex-col.gap-[15px] still stacks items vertically.
+   Fix: convert inner nav to horizontal scroll too.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Inner nav group: horizontal scrollable pills */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\] {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    gap: 4px !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+  }
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\]::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Each nav item: compact pill, no icon needed on mobile */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\] > div {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: var(--sp-xs, 6px) var(--sp-sm, 10px) !important;
+    border-radius: 20px !important;
+    font-size: var(--fs-xs, 12px) !important;
+    gap: var(--sp-xs, 4px) !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* Active/selected nav pill highlight */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\] > div[class*="bg-"] {
+    background: rgba(124, 58, 237, 0.1) !important;
+    color: #7c3aed !important;
+  }
+
+  /* Hide icons in settings nav pills to save space */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all
+  .flex.flex-1.flex-col.gap-\[15px\] > div svg {
+    display: none !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 49b — Media filename label: prevent overflow clipping
+   The .absolute.bottom-[10px].end-[10px] label can extend left
+   of the grid cell, getting clipped by overflow:hidden on .withp3.
+   Fix: anchor left edge and add text-overflow: ellipsis.
+   ────────────────────────────────────────────────────────────── */
+.group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\]
+.absolute.bottom-\[10px\].end-\[10px\].z-\[100\] {
+  left: 4px !important;
+  right: 4px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: clamp(9px, 2.5vw, 11px) !important;
+}
