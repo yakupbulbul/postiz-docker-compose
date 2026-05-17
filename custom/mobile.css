@@ -2827,83 +2827,73 @@ table {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   COMMIT 51 — Utility icons live in the bottom nav bar
-   Moon / flag / bell move from header into the bottom bar row,
-   anchored to the right side. No dropdown, no hamburger needed.
+   COMMIT 51 — Header hamburger menu (☰) for utility icons
+   Moon / flag / bell stay in the header, hidden behind a ☰ button.
+   Tapping slides in a compact panel from the top-right corner.
    ────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
 
-  /* ── Always-visible utility strip, right side of bottom bar ── */
+  /* ── Slide controls off-screen by default ── */
   .flex.gap-\[20px\].text-textItemBlur {
     position: fixed !important;
-    bottom: 0 !important;
-    right: 0 !important;
-    top: auto !important;
-    height: clamp(52px, 9vw, 68px) !important;
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    padding: 0 clamp(6px, 2vw, 12px) !important;
-    z-index: 10001 !important;
-    display: flex !important;
+    top: clamp(52px, 10vw, 70px) !important;
+    right: -260px !important;
+    bottom: auto !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.09) !important;
+    border-radius: 16px !important;
+    padding: 10px 18px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13) !important;
+    z-index: 9998 !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: clamp(6px, 2vw, 12px) !important;
-    transition: none !important;
-    color: #9ca3af !important;
+    gap: 18px !important;
+    transition: right 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    color: inherit !important;
+    height: auto !important;
   }
 
-  /* ── No open/close state needed any more ── */
+  /* ── Open state: slide into view ── */
   .flex.gap-\[20px\].text-textItemBlur.header-menu-open {
-    right: 0 !important;
+    right: 8px !important;
   }
 
-  /* ── Scale down icons to fit comfortably in the nav bar ── */
-  .flex.gap-\[20px\].text-textItemBlur svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
-
-  /* ── Scale down the flag ── */
-  .flex.gap-\[20px\].text-textItemBlur .rounded-full.overflow-hidden {
-    width: 18px !important;
-    height: 18px !important;
-  }
-
-  /* ── Hide dividers ── */
+  /* ── Hide the thin divider lines inside the panel ── */
   .flex.gap-\[20px\].text-textItemBlur .w-\[1px\] {
     display: none !important;
   }
 
-  /* ── Tighten gap between utility icons ── */
-  .flex.gap-\[20px\].text-textItemBlur {
-    gap: 6px !important;
-    padding: 0 8px !important;
-  }
-
-  /* ── Left-side nav items: leave exact room for utility strip ──
-     3 icons × 18px + 2 gaps × 6px + 8px right padding + 1px separator + 6px margin = ~78px  */
-  #mobile-bottom-nav {
-    padding-right: 80px !important;
-  }
-
-  /* ── Left border to visually separate from nav tabs ── */
-  .flex.gap-\[20px\].text-textItemBlur::before {
-    content: '' !important;
-    display: block !important;
-    width: 1px !important;
-    height: 22px !important;
-    background: rgba(0, 0, 0, 0.12) !important;
-    flex-shrink: 0 !important;
-    margin-right: 4px !important;
-  }
-
-  /* ── Hamburger button: hidden (no longer needed) ── */
-  #mobile-header-menu-btn {
-    display: none !important;
-  }
+  /* ── Backdrop ── */
   #mobile-header-backdrop {
-    display: none !important;
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    background: transparent;
+  }
+  #mobile-header-backdrop.open {
+    display: block;
+  }
+
+  /* ── ☰ hamburger toggle button ── */
+  #mobile-header-menu-btn {
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 6px !important;
+    color: #6b7280 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    transition: color 0.15s, background 0.15s !important;
+  }
+  #mobile-header-menu-btn.open {
+    color: #7c3aed !important;
+    background: rgba(124, 58, 237, 0.08) !important;
   }
 }
