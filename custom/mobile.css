@@ -3496,3 +3496,71 @@ table {
     align-self: stretch !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 55 — Create Post: fix channel selector layout
+   
+   The channel selector .flex.flex-wrap.gap-[12px].flex-1 has its
+   children forced to 50% width by the integrations grid rule.
+   Override children to be compact circles for horizontal scroll.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Channel selector children: compact circles, no 50% min-width */
+  .flex.flex-wrap.gap-\[12px\].flex-1 > * {
+    min-width: auto !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+  }
+
+  /* Channel selector wrapper: proper horizontal scroll */
+  .flex.flex-wrap.gap-\[12px\].flex-1 {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    gap: 8px !important;
+    align-items: center !important;
+    padding: 4px 2px 6px !important;
+    width: 100% !important;
+  }
+
+  .flex.flex-wrap.gap-\[12px\].flex-1::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Ensure the channel circle icons have proper size */
+  .flex.flex-wrap.gap-\[12px\].flex-1 .cursor-pointer.border-\[2px\].relative.rounded-full {
+    flex-shrink: 0 !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  /* The outer .flex.gap-[8px].items-center wrapping label+channels */
+  /* Only target those in the Create Post modal */
+  .w-full.h-full.fixed .flex.gap-\[8px\].items-center {
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 55 PATCH — Fix channel items taking full width
+   
+   Each .flex.gap-[8px].items-center child was stretching to
+   fill the row width. Force fit-content width on each.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Channel items (wrappers with tooltip): fit-content, not full-width */
+  .flex.flex-wrap.gap-\[12px\].flex-1 > .flex.gap-\[8px\].items-center {
+    flex-shrink: 0 !important;
+    width: fit-content !important;
+    max-width: fit-content !important;
+    min-width: auto !important;
+    flex: 0 0 auto !important;
+  }
+}
