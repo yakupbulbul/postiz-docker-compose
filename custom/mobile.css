@@ -1116,3 +1116,73 @@ html, body {
     padding: 14px !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 21 — Calendar post card improvements (mobile)
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Post cards inside calendar cells — constrain height, clean truncation */
+  .calendar-post-card,
+  .fc-event,
+  [class*="post-card"],
+  .cursor-pointer.rounded-\[4px\].flex,
+  .cursor-pointer.rounded-\[6px\].flex,
+  .cursor-pointer.rounded-\[8px\].flex {
+    max-height: 56px !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  /* Post card body text — 2-line clamp */
+  .cursor-pointer.rounded-\[4px\].flex p,
+  .cursor-pointer.rounded-\[6px\].flex p,
+  .cursor-pointer.rounded-\[8px\].flex p,
+  [class*="post-card"] p {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
+  }
+
+  /* Time label inside post card */
+  .cursor-pointer.rounded-\[4px\].flex .text-\[12px\],
+  .cursor-pointer.rounded-\[6px\].flex .text-\[12px\],
+  [class*="post-card"] .text-\[12px\] {
+    font-size: 10px !important;
+  }
+
+  /* Platform/channel icon in card — ensure it renders at a fixed small size */
+  .cursor-pointer.rounded-\[4px\].flex img,
+  .cursor-pointer.rounded-\[6px\].flex img,
+  [class*="post-card"] img {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Calendar cell itself — enough min-height to show a card */
+  .bg-newBgColorInner.border.border-newBorder.flex.flex-col {
+    min-height: 64px !important;
+  }
+
+  /* Prevent post cards from stretching the cell beyond screen */
+  .bg-newBgColorInner.border.border-newBorder {
+    overflow: hidden !important;
+  }
+
+  /* Day-view: give each time slot a visible minimum height */
+  .relative.border-b.border-newBorder {
+    min-height: 48px !important;
+  }
+
+  /* Day-view post cards: full width, no fixed height constraint */
+  .absolute.rounded-\[4px\],
+  .absolute.rounded-\[6px\] {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
