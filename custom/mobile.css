@@ -1057,3 +1057,62 @@ html, body {
     max-height: 85dvh !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 20 — Tablet breakpoint (769px – 1024px)
+   iPad mini, Android tablets, small laptops
+   ------------------------------------------------------------ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  /* Shrink the left sidebar icon strip from 80px → 64px */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] {
+    width: 64px !important;
+    min-width: 64px !important;
+  }
+
+  /* Sidebar icons — slightly smaller */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Header — reduce height slightly */
+  .h-\[80px\].flex.bg-newBgColorInner {
+    height: 64px !important;
+    min-height: 64px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Page title — slightly smaller */
+  .text-\[24px\].font-\[600\] {
+    font-size: 20px !important;
+  }
+
+  /* Calendar grid — allow horizontal scroll on tablets too */
+  .grid.\[grid-template-columns\:136px_repeat\(7\,_minmax\(0\,_1fr\)\)\] {
+    min-width: 700px !important;
+  }
+
+  .grid.grid-cols-7 {
+    min-width: 560px !important;
+  }
+
+  .flex-1.relative:has(.grid) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Post composer: slightly reduced preview panel on tablet */
+  .w-\[580px\].flex.flex-col {
+    width: 380px !important;
+  }
+
+  /* Settings fixed-width containers — allow slightly wider on tablet */
+  .max-w-\[600px\] { max-width: 100% !important; }
+  .w-\[600px\]     { width: 100% !important; max-width: 560px !important; }
+
+  /* Content padding — slightly tighter on tablet */
+  .p-\[20px\] {
+    padding: 14px !important;
+  }
+}
