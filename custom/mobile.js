@@ -365,14 +365,14 @@
     backdrop.id = 'mobile-header-backdrop';
     document.body.appendChild(backdrop);
 
-    /* ⋮ toggle button */
+    /* ☰ hamburger toggle button */
     var btn = document.createElement('button');
     btn.id = 'mobile-header-menu-btn';
-    btn.setAttribute('aria-label', 'More options');
-    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
-      + '<circle cx="12" cy="5"  r="2" fill="currentColor"/>'
-      + '<circle cx="12" cy="12" r="2" fill="currentColor"/>'
-      + '<circle cx="12" cy="19" r="2" fill="currentColor"/>'
+    btn.setAttribute('aria-label', 'Menu');
+    btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">'
+      + '<line x1="3" y1="6"  x2="21" y2="6"/>'
+      + '<line x1="3" y1="12" x2="21" y2="12"/>'
+      + '<line x1="3" y1="18" x2="21" y2="18"/>'
       + '</svg>';
 
     /* Insert button at the end of the header bar */
