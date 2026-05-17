@@ -151,12 +151,12 @@
 
     history.pushState = function () {
       origPush.apply(history, arguments);
-      setTimeout(function () { updateActive(); buildFab(); }, 50);
+      setTimeout(function () { updateActive(); buildFab(); setTimeout(switchToDayView, 400); }, 50);
     };
 
     history.replaceState = function () {
       origReplace.apply(history, arguments);
-      setTimeout(function () { updateActive(); buildFab(); }, 50);
+      setTimeout(function () { updateActive(); buildFab(); setTimeout(switchToDayView, 400); }, 50);
     };
   })();
 
@@ -202,6 +202,48 @@
     clearTimeout(calObserver._t);
     calObserver._t = setTimeout(abbreviateDayNames, 80);
   });
+
+  /* ----------------------------------------------------------
+     Calendar: auto-switch to Day view on mobile
+     Commit 17 — only fires once per session; won't override
+     a manual view switch by the user.
+     ---------------------------------------------------------- */
+  var DAY_VIEW_KEY = 'postiz_mobile_day_view_switched';
+
+  function switchToDayView() {
+    // Only on /launches route
+    if (getActivePath().indexOf('/launches') !== 0) return;
+    // Only once per session
+    if (sessionStorage.getItem(DAY_VIEW_KEY)) return;
+
+    // Find the Day view tab/button — try multiple selector strategies
+    function trySwitch() {
+      // Strategy 1: role="tab" containing text "Day"
+      var tabs = Array.from(document.querySelectorAll('[role="tab"], button'));
+      var dayBtn = tabs.find(function (el) {
+        var txt = (el.textContent || '').trim();
+        return txt === 'Day' || txt === 'day';
+      });
+      if (dayBtn) {
+        var isAlreadyActive = dayBtn.getAttribute('aria-selected') === 'true' ||
+                              dayBtn.getAttribute('data-active') === 'true' ||
+                              dayBtn.classList.contains('active');
+        if (!isAlreadyActive) dayBtn.click();
+        sessionStorage.setItem(DAY_VIEW_KEY, '1');
+        return true;
+      }
+      return false;
+    }
+
+    // Try immediately, then retry a few times as the page renders
+    if (!trySwitch()) {
+      var attempts = 0;
+      var retryTimer = setInterval(function () {
+        attempts++;
+        if (trySwitch() || attempts > 8) clearInterval(retryTimer);
+      }, 250);
+    }
+  }
 
   /* ----------------------------------------------------------
      Floating Action Button (FAB) — "Create Post"
@@ -250,6 +292,7 @@
     buildNav();
     buildFab();
     abbreviateDayNames();
+    setTimeout(switchToDayView, 400);
     calObserver.observe(document.body, { childList: true, subtree: true });
 
     // Re-check viewport on resize (tablet → desktop: remove nav + fab)
