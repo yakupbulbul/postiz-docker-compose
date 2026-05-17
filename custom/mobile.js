@@ -6,8 +6,7 @@
 (function () {
   'use strict';
 
-  // Only activate on mobile viewports
-  if (window.innerWidth > 768) return;
+  var isMobile = window.innerWidth <= 768;
 
   /* ----------------------------------------------------------
      Nav item definitions — mirror the sidebar TopMenu order
@@ -77,6 +76,7 @@
      Build + inject the bottom nav bar
      ---------------------------------------------------------- */
   function buildNav() {
+    if (!isMobile) return;
     var existing = document.getElementById('mobile-bottom-nav');
     if (existing) existing.remove();
 
@@ -169,6 +169,28 @@
   }, 500);
 
   /* ----------------------------------------------------------
+     PWA / Add to Home Screen meta tags
+     Commit 18 — injected unconditionally for all viewports
+     ---------------------------------------------------------- */
+  function injectPWAMeta() {
+    var metas = [
+      { name: 'theme-color',                        content: '#1a1919' },
+      { name: 'apple-mobile-web-app-capable',       content: 'yes' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      { name: 'mobile-web-app-capable',             content: 'yes' },
+      { name: 'apple-mobile-web-app-title',         content: 'Postiz' }
+    ];
+    metas.forEach(function (m) {
+      // Skip if the page already has this meta (avoid duplicates from SSR)
+      if (document.querySelector('meta[name="' + m.name + '"]')) return;
+      var el = document.createElement('meta');
+      el.name = m.name;
+      el.content = m.content;
+      document.head.appendChild(el);
+    });
+  }
+
+  /* ----------------------------------------------------------
      Init — wait for DOM ready
      ---------------------------------------------------------- */
   /* ----------------------------------------------------------
@@ -250,6 +272,7 @@
      Commit 16
      ---------------------------------------------------------- */
   function buildFab() {
+    if (!isMobile) return;
     var existing = document.getElementById('mobile-fab');
     if (existing) existing.remove();
 
@@ -289,6 +312,7 @@
   }
 
   function init() {
+    injectPWAMeta();
     buildNav();
     buildFab();
     abbreviateDayNames();
@@ -297,9 +321,10 @@
 
     // Re-check viewport on resize (tablet → desktop: remove nav + fab)
     window.addEventListener('resize', function () {
+      isMobile = window.innerWidth <= 768;
       var nav = document.getElementById('mobile-bottom-nav');
       var fab = document.getElementById('mobile-fab');
-      if (window.innerWidth > 768) {
+      if (!isMobile) {
         if (nav) nav.remove();
         if (fab) fab.remove();
         calObserver.disconnect();
