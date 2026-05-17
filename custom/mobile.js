@@ -224,6 +224,7 @@
     clearTimeout(calObserver._t);
     calObserver._t = setTimeout(function () {
       abbreviateDayNames();
+      fixSidebarLabels();
       if (isMobile && !document.getElementById('mobile-header-menu-btn')) {
         buildHeaderMenu();
       }
@@ -401,12 +402,27 @@
     });
   }
 
+  /* ----------------------------------------------------------
+     Desktop sidebar: shorten "Integrations" label to "Integr." so
+     it doesn't wrap on the 80px-wide left nav.
+     ---------------------------------------------------------- */
+  function fixSidebarLabels() {
+    // Left sidebar nav label elements — Postiz uses <div class="text-[10px]"> inside <a>
+    var labels = document.querySelectorAll('a > div, a > span, button > div, button > span');
+    labels.forEach(function (el) {
+      if ((el.textContent || '').trim() === 'Integrations') {
+        el.textContent = 'Integr.';
+      }
+    });
+  }
+
   function init() {
     injectPWAMeta();
     buildNav();
     buildFab();
     buildHeaderMenu();
     abbreviateDayNames();
+    fixSidebarLabels();
     setTimeout(switchToDayView, 400);
     calObserver.observe(document.body, { childList: true, subtree: true });
 

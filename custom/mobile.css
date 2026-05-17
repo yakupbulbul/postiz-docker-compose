@@ -3663,17 +3663,230 @@ table {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   56g — Desktop: sidebar and main content max-width rhythm
+   COMMIT 58 — Desktop UI Polish & UX Improvements
+   Targets: all pages at ≥ 1025px viewport.
+   Goals:
+   - Expand content beyond old 720/800px max-width caps
+   - Improve sidebar legibility (no wrapping labels)
+   - Refine header, typography, card rhythm
+   - Better Analytics chart grid
+   - Better Media grid column count
+   - Better Settings layout
    ────────────────────────────────────────────────────────────── */
+
+/* ── 1. REMOVE OVERLY-BROAD 720px MAX-WIDTH ── */
+/* The previous rule matched Calendar/Analytics main content — wrong. */
+/* Content areas should expand to fill available space on desktop.    */
 @media (min-width: 1025px) {
-  /* Ensure the main content area on desktop doesn't overflow */
+
+  /* Main outer container: full width */
   .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden.flex {
     max-width: 100% !important;
   }
 
-  /* Settings page: cap card widths on large screens */
+  /* All flex-1 content panels — remove any inherited max-width cap */
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\],
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\],
   .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] {
-    max-width: min(100%, 720px) !important;
+    max-width: 100% !important;
+  }
+
+  /* Remove the .max-w-[800px] constraint the app puts on settings content */
+  .max-w-\[800px\] {
+    max-width: 100% !important;
+  }
+
+  /* ── 2. LEFT NAVIGATION SIDEBAR ── */
+
+  /* Fix "Integrations" and other long labels wrapping to 2 lines */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] a span,
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] button span,
+  #left-menu a span,
+  #left-menu button span {
+    font-size: 10px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 68px !important;
+    display: block !important;
+    text-align: center !important;
+  }
+
+  /* Sidebar nav item — ensure consistent spacing */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] a,
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] button,
+  #left-menu a,
+  #left-menu button {
+    padding: 8px 4px !important;
+    min-height: 56px !important;
+    gap: 4px !important;
+  }
+
+  /* Active state: keep pill highlight clean */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] a.active,
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] button.active {
+    border-radius: 10px !important;
+  }
+
+  /* Sidebar icon size */
+  .w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] svg,
+  #left-menu svg {
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* ── 3. PAGE HEADER ── */
+
+  /* Bigger, bolder page title on desktop */
+  .flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center h1,
+  .flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center .text-\[24px\],
+  .flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center .font-\[600\] {
+    font-size: clamp(22px, 2vw, 28px) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  /* Header height: slightly taller on desktop for more breathing room */
+  .flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center {
+    height: 68px !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+
+  /* ── 4. SETTINGS PAGE ── */
+
+  /* Settings section sidebar nav: clean list style */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] {
+    padding: 16px 12px !important;
+    width: 220px !important;
+  }
+
+  /* Settings nav items */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] a,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] button {
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: left !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Settings content cards: better internal spacing */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[12px\] > div,
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\] > div {
+    max-width: 900px !important;
+  }
+
+  /* Individual setting card */
+  .bg-sixth.border-fifth.border.rounded-\[4px\] {
+    border-radius: 10px !important;
+    padding: 24px !important;
+  }
+
+  /* Setting row (label + description + control) */
+  .bg-sixth.border-fifth.border.rounded-\[4px\] .flex.justify-between,
+  .bg-sixth.border-fifth.border.rounded-\[4px\] .flex.gap-\[20px\] {
+    align-items: center !important;
+  }
+
+  /* ── 5. ANALYTICS PAGE ── */
+
+  /* Chart stat cards: use CSS Grid for better alignment */
+  .grid.grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* Analytics channel list sidebar */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] > div > div {
+    min-height: 44px !important;
+  }
+
+  /* Analytics "7 Days" dropdown */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] > div:first-child select,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] > div:first-child [role="combobox"] {
+    min-width: 140px !important;
+    border-radius: 8px !important;
+  }
+
+  /* Metric card: bigger number display */
+  .grid.grid-cols-3 > div .text-\[40px\],
+  .grid.grid-cols-3 > div [class*="text-[40"] {
+    font-size: clamp(28px, 3vw, 40px) !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.03em !important;
+  }
+
+  /* ── 6. MEDIA PAGE ── */
+
+  /* Media grid: auto-fill with minimum 150px cards, no fixed column count */
+  [class*="withp3"] {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    gap: 8px !important;
+    padding: 16px !important;
+  }
+
+  /* Search + Upload bar: don't stretch to full width unnecessarily */
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\] > div:first-child {
+    max-width: 600px !important;
+  }
+
+  /* ── 7. CALENDAR PAGE ── */
+
+  /* Calendar toolbar: single row, no wrap */
+  .flex.flex-wrap.items-center.gap-\[10px\] {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+  }
+
+  /* Calendar date navigation: more breathing room */
+  .flex.items-center.gap-\[5px\] {
+    gap: 6px !important;
+  }
+
+  /* Calendar post thumbnails: slightly larger on desktop */
+  .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\] {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  /* ── 8. GENERAL DESKTOP CARD RHYTHM ── */
+
+  /* Consistent card border radius */
+  .rounded-\[4px\] {
+    border-radius: 8px !important;
+  }
+
+  /* Subtle shadows on white panels */
+  .bg-newBgColorInner {
+    box-shadow: none !important;
+  }
+
+  /* Content area padding */
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\],
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\] {
+    padding: 24px 28px !important;
+  }
+
+  /* ── 9. SECTION TITLES ── */
+
+  /* Section/card titles */
+  .text-\[18px\].font-\[600\],
+  .text-\[20px\].font-\[600\] {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    color: inherit !important;
   }
 }
 
