@@ -251,16 +251,22 @@ html, body {
    COMMIT 5 — UX polish: touch targets, modals, forms
    ------------------------------------------------------------ */
 
-/* Minimum 44px touch target on all interactive elements */
+/* Minimum 44px touch target on interactive elements — scoped to avoid breaking inline links */
 @media (max-width: 768px) {
   button,
   [role="button"],
-  a,
   select,
   input[type="checkbox"],
   input[type="radio"] {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Nav and standalone action links (not inline text links) */
+  nav a,
+  [role="navigation"] a,
+  .cursor-pointer:not(p):not(span):not(li) {
+    min-height: 44px;
   }
 
   /* Exception: inline icon buttons inside text */
@@ -759,13 +765,26 @@ html, body {
    ------------------------------------------------------------ */
 @media (max-width: 768px) {
   /* Break long words (URLs, handles, keys) before they overflow */
-  p, span, div, td, li {
+  p, span, td, li {
     overflow-wrap: break-word;
     word-break: break-word;
   }
 
-  /* Truncate long page/post titles in single lines */
-  h1, h2, h3 {
+  /* Buttons and labels must NOT have word-break (overrides the rule above for nested spans) */
+  button, [role="button"], label {
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    white-space: nowrap !important;
+  }
+
+  /* But allow multi-line button text in modals / action sheets */
+  [class*="mantine-Modal-body"] button,
+  [class*="mantine-Drawer-body"] button {
+    white-space: normal !important;
+  }
+
+  /* Truncate long page titles — scoped to Tailwind size classes, not all headings */
+  .text-\[24px\], .text-\[20px\], .text-\[18px\] {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
