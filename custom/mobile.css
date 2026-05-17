@@ -2191,3 +2191,58 @@ html, body {
     flex-direction: column !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 47 — Create Post: fix channel selector to horizontal scroll
+   Actual DOM: container is flex flex-wrap gap-[12px] flex-1
+   Each circle: cursor-pointer border-[2px] relative rounded-full
+   Override to single horizontal scrolling row.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Channel picker container: single row horizontal scroll */
+  .flex.flex-wrap.gap-\[12px\].flex-1 {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 4px 4px 8px !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  .flex.flex-wrap.gap-\[12px\].flex-1::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Each channel circle: no shrink */
+  .flex.flex-wrap.gap-\[12px\].flex-1 > * {
+    flex-shrink: 0 !important;
+  }
+
+  /* Outer row containing label + channel circles */
+  .flex.gap-\[8px\].items-center {
+    flex-wrap: nowrap !important;
+    overflow: visible !important;
+  }
+
+  /* ── Post composer text area: better height ── */
+  /* The post text editor in Create Post modal */
+  .flex-1.min-h-\[200px\].max-h-\[40vh\],
+  .flex-1.min-h-\[150px\].max-h-\[40vh\],
+  [contenteditable="true"][class*="min-h"],
+  .ProseMirror,
+  [class*="ql-editor"],
+  [class*="editor"] {
+    min-height: 120px !important;
+    max-height: 35vh !important;
+    overflow-y: auto !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Post Preview section — compact height */
+  .max-h-\[40vh\], .max-h-\[50vh\] {
+    max-height: 35vh !important;
+  }
+}
