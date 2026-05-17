@@ -1007,3 +1007,53 @@ html, body {
     display: none !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 19 — Landscape orientation fixes
+   Targets phones in landscape (narrow height, wide width)
+   ------------------------------------------------------------ */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Compact bottom nav — reduce height to save vertical space */
+  #mobile-bottom-nav {
+    height: 48px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* FAB — move to bottom-right, smaller diameter */
+  #mobile-fab {
+    width: 44px !important;
+    height: 44px !important;
+    bottom: 56px !important;
+    right: 14px !important;
+  }
+
+  #mobile-fab svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Header — shrink aggressively in landscape */
+  .h-\[80px\].flex.bg-newBgColorInner,
+  .h-\[56px\].flex.bg-newBgColorInner {
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+
+  /* Content area — add bottom padding for compact nav */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\] {
+    padding-bottom: 52px !important;
+  }
+
+  /* Outer padding wrapper — smaller top/bottom padding */
+  .flex.flex-col.min-h-screen.p-\[12px\] {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Modal sheets — limit height so they don't cover entire screen */
+  [class*="mantine-Modal-content"],
+  [class*="mantine-Drawer-content"] {
+    min-height: 40dvh !important;
+    max-height: 85dvh !important;
+  }
+}
