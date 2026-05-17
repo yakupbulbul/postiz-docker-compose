@@ -151,12 +151,12 @@
 
     history.pushState = function () {
       origPush.apply(history, arguments);
-      setTimeout(updateActive, 50);
+      setTimeout(function () { updateActive(); buildFab(); }, 50);
     };
 
     history.replaceState = function () {
       origReplace.apply(history, arguments);
-      setTimeout(updateActive, 50);
+      setTimeout(function () { updateActive(); buildFab(); }, 50);
     };
   })();
 
@@ -203,19 +203,66 @@
     calObserver._t = setTimeout(abbreviateDayNames, 80);
   });
 
+  /* ----------------------------------------------------------
+     Floating Action Button (FAB) — "Create Post"
+     Commit 16
+     ---------------------------------------------------------- */
+  function buildFab() {
+    var existing = document.getElementById('mobile-fab');
+    if (existing) existing.remove();
+
+    var prefix = getOrgPrefix();
+    // Skip on auth pages
+    var path = window.location.pathname;
+    if (/\/(login|register|auth)/.test(path)) return;
+
+    var btn = document.createElement('button');
+    btn.id = 'mobile-fab';
+    btn.setAttribute('aria-label', 'Create post');
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+
+    btn.addEventListener('click', function () {
+      // Strategy 1: find a "Create post" / "New post" button and click it
+      var createBtns = Array.from(document.querySelectorAll('button, [role="button"]'));
+      var target = createBtns.find(function (el) {
+        var txt = (el.textContent || el.innerText || '').trim().toLowerCase();
+        return txt === 'create post' || txt === 'new post' || txt === '+ create post' || txt === 'add post';
+      });
+      if (target) {
+        target.click();
+        return;
+      }
+      // Strategy 2: navigate to launches page where the create button lives
+      var dest = prefix + '/launches';
+      if (window.location.pathname.indexOf('/launches') === -1) {
+        window.location.href = dest;
+      } else {
+        // We're already on launches — try clicking the first prominent purple/primary button
+        var primaryBtn = document.querySelector('[class*="bg-primary"], [class*="bg-btnPrimary"], [class*="bg-purple"]');
+        if (primaryBtn) primaryBtn.click();
+      }
+    });
+
+    document.body.appendChild(btn);
+  }
+
   function init() {
     buildNav();
+    buildFab();
     abbreviateDayNames();
     calObserver.observe(document.body, { childList: true, subtree: true });
 
-    // Re-check viewport on resize (tablet → desktop: remove nav)
+    // Re-check viewport on resize (tablet → desktop: remove nav + fab)
     window.addEventListener('resize', function () {
       var nav = document.getElementById('mobile-bottom-nav');
+      var fab = document.getElementById('mobile-fab');
       if (window.innerWidth > 768) {
         if (nav) nav.remove();
+        if (fab) fab.remove();
         calObserver.disconnect();
       } else {
         if (!nav) buildNav();
+        if (!fab) buildFab();
         calObserver.observe(document.body, { childList: true, subtree: true });
       }
     });
