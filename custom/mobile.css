@@ -1240,3 +1240,143 @@ html, body {
     -webkit-overflow-scrolling: touch !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 26 — Calendar toolbar: compact date nav on mobile
+   Source: filters.tsx container "flex flex-col md:flex-row gap-[8px]"
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Date display in nav row — remove 200px minimum width */
+  .min-w-\[200px\].text-center {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    font-size: 13px !important;
+  }
+
+  /* Nav arrow buttons — slightly smaller tap area on mobile */
+  .border.h-\[42px\].border-newTableBorder {
+    height: 36px !important;
+  }
+
+  /* View switcher individual buttons — shrink from 74px to fit 3 on screen */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\] {
+    width: 56px !important;
+    font-size: 12px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* View switcher container — tighter padding */
+  .flex.flex-row.p-\[4px\].border.border-newTableBorder.rounded-\[8px\] {
+    padding: 3px !important;
+  }
+
+  /* List/Calendar icon toggle buttons — shrink */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.flex.justify-center.items-center.w-\[34px\] {
+    width: 28px !important;
+    padding: 4px !important;
+  }
+
+  /* Whole filter row — less vertical gap when stacked */
+  .flex.flex-col.gap-\[8px\].items-center.select-none {
+    gap: 6px !important;
+    padding: 8px !important;
+  }
+
+  /* Calendar page content area — give back some vertical space */
+  .flex.flex-col.gap-\[8px\].items-center.select-none + * {
+    flex: 1 !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 27 — Login / auth page mobile polish
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Auth page outer wrapper — full height, proper padding */
+  .flex.h-screen.flex-1.overflow-hidden {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    height: 100dvh !important;
+  }
+
+  /* Auth left panel (testimonial/logo side) — hide on very small screens */
+  @media (max-width: 500px) {
+    .hidden.lg\:flex,
+    .lg\:flex.flex-col.bg-\[url\(\/auth\/background\.png\)\] {
+      display: none !important;
+    }
+  }
+
+  /* Auth right panel (login form) — full width */
+  .lg\:w-\[600px\].flex.flex-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px 20px !important;
+  }
+
+  /* Auth form — center content */
+  .flex.flex-col.gap-\[16px\],
+  .flex.flex-col.gap-\[20px\] {
+    gap: 14px !important;
+  }
+
+  /* "Don't have an account?" links — larger tap targets */
+  .text-\[14px\].text-center a {
+    display: inline-block;
+    padding: 4px 8px;
+  }
+
+  /* Social login buttons — proper width on mobile */
+  .flex.gap-\[12px\] > button,
+  .flex.gap-\[12px\] > a {
+    flex: 1 !important;
+    min-width: 0 !important;
+    justify-content: center !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 28 — Channel picker pills: horizontal scroll in composer
+   10 channels need to scroll, not wrap onto multiple rows
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Channel/integration pills in post composer — single scrollable row */
+  .innerComponent.flex-1.flex,
+  [class*="innerComponent"] {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+    gap: 6px !important;
+    scrollbar-width: none !important;
+  }
+  [class*="innerComponent"]::-webkit-scrollbar { display: none !important; }
+
+  /* Each channel pill — fixed min-width so they don't squish */
+  [class*="innerComponent"] > * {
+    flex-shrink: 0 !important;
+    min-width: 40px !important;
+  }
+
+  /* Channel avatar images in the pill — consistent size */
+  [class*="innerComponent"] img {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Channel selection area in plugs/integrations — grid of 2 cols */
+  .flex.gap-\[12px\].flex-wrap:not([class*="innerComponent"]) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .flex.gap-\[12px\].flex-wrap:not([class*="innerComponent"]) > * {
+    min-width: 0 !important;
+    flex: none !important;
+    width: 100% !important;
+  }
+}
