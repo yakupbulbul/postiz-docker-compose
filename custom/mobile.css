@@ -3564,3 +3564,120 @@ table {
     flex: 0 0 auto !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   COMMIT 56 — Design polish: typography, spacing, dark mode
+   ══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   56a — Calendar: Day/Week/Month visual separator
+   Add subtle separator lines between the buttons so they look
+   like a proper segmented control.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Add separator between Day/Week/Month buttons */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\]:not(:last-child) {
+    border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .dark .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\]:not(:last-child) {
+    border-right-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Active button: no separator on right */
+  .pt-\[6px\].pb-\[5px\].cursor-pointer.w-\[74px\].text-center.rounded-\[6px\].text-textItemFocused.bg-boxFocused {
+    border-right: none !important;
+    margin-right: 0 !important;
+  }
+
+  /* Compact calendar toolbar: reduce top padding to save space */
+  .text-textColor.flex.flex-col.items-center.select-none,
+  .text-textColor.flex.flex-col.md\:flex-row.gap-\[8px\].items-center.select-none {
+    padding-top: var(--sp-xs, 6px) !important;
+    padding-bottom: var(--sp-xs, 6px) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56b — Dark mode: media grid placeholder
+   ────────────────────────────────────────────────────────────── */
+.dark .group.px-\[3px\].py-\[3px\].float-left.rounded-\[6px\]:has(video)
+.w-full.h-full.rounded-\[6px\].border-\[4px\].relative {
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a1a30 100%) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56c — Settings: reduce card padding on mobile for more content density
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Settings section cards: compact padding */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.gap-\[15px\] {
+    padding: var(--sp-md, 14px) !important;
+    gap: var(--sp-sm, 10px) !important;
+  }
+
+  /* Settings card inner sections: reduce gap */
+  .flex.flex-col.gap-\[15px\].bg-\[#f2f2f2\],
+  .flex.flex-col.gap-\[15px\].dark\:bg-\[#2b2b2b\] {
+    gap: var(--sp-sm, 10px) !important;
+    padding: var(--sp-sm, 10px) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56d — Global: improve toggle/switch appearance on mobile
+   Toggles (on/off switches) should have clear tap area and look sharp.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Standard toggle switches: ensure tap area */
+  [role="switch"],
+  [type="checkbox"][class*="toggle"] {
+    min-width: 44px !important;
+    min-height: 28px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56e — Media page: ensure content width after align-items fix
+   The .flex.flex-col.flex-1 child also needs to be full-width
+   to properly contain the withp3 grid container.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Override any inherited centering from parent flex containers */
+  .relative.flex.flex-col.flex-1 > * {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Except fixed-size elements like the calendar/list icon toggle */
+  .relative.flex.flex-col.flex-1 > .flex.flex-row.p-\[4px\].border {
+    width: auto !important;
+    max-width: auto !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56f — Bottom nav: consistent elevation and clean look
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Ensure FAB clears the bottom nav comfortably */
+  #mobile-fab {
+    right: var(--content-px, 16px) !important;
+    bottom: calc(var(--nav-height, 58px) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   56g — Desktop: sidebar and main content max-width rhythm
+   ────────────────────────────────────────────────────────────── */
+@media (min-width: 1025px) {
+  /* Ensure the main content area on desktop doesn't overflow */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden.flex {
+    max-width: 100% !important;
+  }
+
+  /* Settings page: cap card widths on large screens */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] {
+    max-width: min(100%, 720px) !important;
+  }
+}
