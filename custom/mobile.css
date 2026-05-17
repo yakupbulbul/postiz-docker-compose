@@ -3638,21 +3638,15 @@ table {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   56e — Media page: ensure content width after align-items fix
-   The .flex.flex-col.flex-1 child also needs to be full-width
-   to properly contain the withp3 grid container.
+   56e — Media page: ensure content column is full-width
+   Only target the primary .flex.flex-col.flex-1 child wrapper.
    ────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  /* Override any inherited centering from parent flex containers */
-  .relative.flex.flex-col.flex-1 > * {
+  /* The primary content column inside the main wrapper */
+  .relative.flex.flex-col.flex-1 > .flex.flex-col.flex-1 {
     width: 100% !important;
     max-width: 100% !important;
-  }
-
-  /* Except fixed-size elements like the calendar/list icon toggle */
-  .relative.flex.flex-col.flex-1 > .flex.flex-row.p-\[4px\].border {
-    width: auto !important;
-    max-width: auto !important;
+    align-self: stretch !important;
   }
 }
 
@@ -3679,5 +3673,33 @@ table {
   /* Settings page: cap card widths on large screens */
   .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\] {
     max-width: min(100%, 720px) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   57 — Empty-state pages: contain oversized children
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Empty-state container (Plugs, Analytics, etc.) uses flex-col items-center
+     but children have large intrinsic widths that overflow the viewport.
+     Clip them and ensure content stays within bounds. */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\].transition-all.items-center.justify-center {
+    overflow: hidden !important;
+  }
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\].transition-all.items-center.justify-center > * {
+    max-width: 100% !important;
+  }
+  /* Make the illustration scale down instead of overflowing */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\].transition-all.items-center.justify-center img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  /* Center-align the text in the empty-state message */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\].transition-all.items-center.justify-center .text-\[48px\] {
+    text-align: center !important;
+    font-size: clamp(16px, 5vw, 24px) !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }
