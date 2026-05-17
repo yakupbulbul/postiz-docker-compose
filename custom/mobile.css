@@ -1482,3 +1482,31 @@ html, body {
     font-size: 10px !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 35 — Calendar toolbar: compact 2-row layout on mobile
+   The container uses flex-col (3 rows) on mobile, flex-row on md+.
+   On mobile: make it flex-row flex-wrap so Day/Week/Month and
+   the Calendar/List icon toggle share the second row instead of
+   each taking its own row — saves ~50px of vertical space.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Toolbar container: switch to row-wrap */
+  .text-textColor.flex.flex-col.items-center.select-none {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+  /* First child (date nav: arrows + date + Today) — take full width */
+  .text-textColor.flex.flex-col.items-center.select-none > *:first-child {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+  }
+  /* Subsequent children (Day/Week/Month and icons) — side-by-side */
+  .text-textColor.flex.flex-col.items-center.select-none > *:not(:first-child) {
+    flex-shrink: 0 !important;
+  }
+}
