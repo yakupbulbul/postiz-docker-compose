@@ -1186,3 +1186,57 @@ html, body {
     overflow: visible !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 23 — Hide CopilotKit AI chat on mobile
+   The OpenAI key is not configured; the widget is non-functional
+   and causes repeated API timeouts. Hide it on mobile to reclaim
+   screen space and eliminate the broken UX.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* CopilotKit chat panel — class confirmed from source: "trz agent ..." */
+  .trz.agent,
+  [class*="copilotKit"],
+  [class*="copilot-kit"],
+  .copilotKitMessages,
+  .copilotKitMessage {
+    display: none !important;
+  }
+
+  /* If the agent panel pushes other content, restore layout */
+  .flex.flex-1:has(.trz.agent) {
+    flex-direction: column !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 25 — Fix overflow-hidden clipping on main content area
+   The main wrapper has overflow:hidden which clips content on
+   mobile. Allow the inner scroll container to scroll properly.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Main app wrapper — allow overflow so bottom-padding clearance works */
+  .flex.flex-col.min-h-screen.min-w-screen.text-newTextColor.p-\[12px\] {
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  /* Main content column (right of sidebar) */
+  .flex-1.bg-newBgLineColor.rounded-\[12px\].overflow-hidden {
+    overflow: visible !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Inner flex row that contains the page panels */
+  .flex.flex-1.gap-\[1px\] {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Ensure the outer padding wrapper doesn't clip either */
+  .flex-1.bg-newBgLineColor {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
