@@ -2019,3 +2019,175 @@ html, body {
     border: 1.5px solid #ffffff !important;
   }
 }
+
+/* ------------------------------------------------------------
+   COMMIT 43 — Settings sidebar: full-width vertical nav on mobile
+   The settings uses a 2-panel layout (sidebar + content).
+   On mobile, make the sidebar collapse to a horizontal pill row.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Settings layout: stack vertically */
+  .flex-1.flex.gap-\[8px\],
+  .flex.flex-1.gap-\[8px\] {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+
+  /* Settings left sidebar panel: horizontal scrolling pill nav */
+  .w-\[200px\].min-w-\[200px\],
+  .w-\[220px\].min-w-\[220px\],
+  .min-w-\[200px\],
+  .min-w-\[220px\] {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 8px 12px !important;
+    gap: 6px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+    display: flex !important;
+    height: auto !important;
+    min-height: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Each settings nav item — compact pill */
+  .w-\[200px\].min-w-\[200px\] > *,
+  .w-\[220px\].min-w-\[220px\] > *,
+  .min-w-\[200px\] > *,
+  .min-w-\[220px\] > * {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    font-size: 13px !important;
+    min-height: 34px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Settings content area: full width */
+  .flex-1.flex.gap-\[8px\] > *:last-child,
+  .flex.flex-1.gap-\[8px\] > *:last-child {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 44 — FAB visibility: hide on non-creation pages
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Hide FAB on analytics, settings, channels/plugs pages */
+  body[data-page*="analytics"] #mobile-fab,
+  body[data-page*="settings"] #mobile-fab,
+  body[data-page*="plugs"] #mobile-fab {
+    display: none !important;
+  }
+
+  /* Additional CSS-based hide using URL — covered by JS but belt-and-suspenders */
+  /* FAB is already hidden by JS for /analytics, /settings, /agents routes */
+}
+
+/* ------------------------------------------------------------
+   COMMIT 45 — Header: tighten title + reduce excess padding
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Page-level title row (the "Analytics", "Settings" etc headings) */
+  .text-\[24px\].font-\[600\],
+  .text-\[24px\].font-\[700\],
+  h1.text-\[24px\] {
+    font-size: 20px !important;
+    letter-spacing: -0.3px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Inner page container: reduce side padding so content fills viewport */
+  .flex-1.flex.flex-col.p-\[20px\],
+  .flex-1.flex.flex-col.p-\[24px\],
+  .flex-1.overflow-y-auto.p-\[20px\],
+  .flex-1.overflow-y-auto.p-\[24px\] {
+    padding: 14px 12px !important;
+  }
+
+  /* Less padding for inner cards too */
+  .bg-third.rounded-\[12px\].p-\[20px\],
+  .bg-third.rounded-\[12px\].p-\[24px\],
+  .rounded-\[12px\].p-\[20px\],
+  .rounded-\[12px\].p-\[24px\] {
+    padding: 14px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Analytics stat cards: wrap to 2 columns */
+  .grid.grid-cols-4,
+  .grid.grid-cols-3 {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  /* Analytics recharts chart: full width, constrained height */
+  .recharts-wrapper,
+  .recharts-surface {
+    max-width: 100% !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   COMMIT 46 — Settings sidebar: correct selectors (verified DOM)
+   Sidebar: bg-newBgColorInner p-[20px] flex flex-col transition-all w-[260px]
+   Container: (second) flex flex-1 gap-[1px]
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  /* Convert the two-panel row into a column stack */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all {
+    /* This matches the sidebar (has transition-all) — make it horizontal pills */
+    flex-direction: row !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 10px 12px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 4px !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+    flex-shrink: 0 !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Each nav item inside settings sidebar */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all > * {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    font-size: 13px !important;
+    min-height: 32px !important;
+    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    width: auto !important;
+    min-width: auto !important;
+    justify-content: center !important;
+  }
+
+  /* The parent container: force column direction */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all ~ .bg-newBgColorInner.flex-1.flex-col.flex {
+    width: 100% !important;
+  }
+
+  /* Make the two-panel container a column */
+  .flex.flex-1.gap-\[1px\]:has(.bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all) {
+    flex-direction: column !important;
+  }
+}

@@ -290,9 +290,9 @@
     if (existing) existing.remove();
 
     var prefix = getOrgPrefix();
-    // Skip on auth pages
+    // Skip on auth pages and non-creation pages
     var path = window.location.pathname;
-    if (/\/(login|register|auth)/.test(path)) return;
+    if (/\/(login|register|auth|analytics|settings|agents)/.test(path)) return;
 
     var btn = document.createElement('button');
     btn.id = 'mobile-fab';
