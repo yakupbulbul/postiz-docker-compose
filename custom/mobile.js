@@ -174,9 +174,9 @@
      ---------------------------------------------------------- */
   function injectPWAMeta() {
     var metas = [
-      { name: 'theme-color',                        content: '#1a1919' },
+      { name: 'theme-color',                        content: '#ffffff' },
       { name: 'apple-mobile-web-app-capable',       content: 'yes' },
-      { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
       { name: 'mobile-web-app-capable',             content: 'yes' },
       { name: 'apple-mobile-web-app-title',         content: 'Postiz' }
     ];
