@@ -2825,3 +2825,74 @@ table {
   white-space: nowrap !important;
   font-size: clamp(9px, 2.5vw, 11px) !important;
 }
+
+/* ──────────────────────────────────────────────────────────────
+   COMMIT 50 — Mobile header overflow menu
+   Hides the moon / flag / bell icons from the header bar and
+   replaces them with a single ⋮ button. Tapping it slides in a
+   compact dropdown panel from the top-right corner.
+   ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+
+  /* ── Slide controls off-screen by default ── */
+  .flex.gap-\[20px\].text-textItemBlur {
+    position: fixed !important;
+    top: clamp(52px, 10vw, 70px) !important;
+    right: -260px !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.09) !important;
+    border-radius: 16px !important;
+    padding: 10px 18px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13) !important;
+    z-index: 9998 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 18px !important;
+    transition: right 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    /* Remove Tailwind flex in case display was removed */
+    display: flex !important;
+  }
+
+  /* ── Open state: slide into view ── */
+  .flex.gap-\[20px\].text-textItemBlur.header-menu-open {
+    right: 8px !important;
+  }
+
+  /* ── Hide the thin divider lines inside the panel ── */
+  .flex.gap-\[20px\].text-textItemBlur .w-\[1px\] {
+    display: none !important;
+  }
+
+  /* ── Semi-transparent backdrop when menu open ── */
+  #mobile-header-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    background: transparent;
+  }
+  #mobile-header-backdrop.open {
+    display: block;
+  }
+
+  /* ── The ⋮ toggle button ── */
+  #mobile-header-menu-btn {
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 6px !important;
+    color: #6b7280 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    transition: color 0.15s, background 0.15s !important;
+  }
+  #mobile-header-menu-btn.open {
+    color: #7c3aed !important;
+    background: rgba(124, 58, 237, 0.08) !important;
+  }
+}

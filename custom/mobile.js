@@ -222,7 +222,13 @@
   var calObserver = new MutationObserver(function () {
     // Debounce slightly so we don't run on every single DOM mutation
     clearTimeout(calObserver._t);
-    calObserver._t = setTimeout(abbreviateDayNames, 80);
+    calObserver._t = setTimeout(function () {
+      abbreviateDayNames();
+      // Re-attach header menu button if React re-rendered the header
+      if (isMobile && !document.getElementById('mobile-header-menu-btn')) {
+        buildHeaderMenu();
+      }
+    }, 80);
   });
 
   /* ----------------------------------------------------------
@@ -344,10 +350,64 @@
     document.body.appendChild(btn);
   }
 
+  /* ----------------------------------------------------------
+     Header overflow menu — replaces moon/flag/bell with a ⋮ button
+     ---------------------------------------------------------- */
+  function buildHeaderMenu() {
+    if (!isMobile) return;
+    if (document.getElementById('mobile-header-menu-btn')) return;
+
+    var controls = document.querySelector('.flex.gap-\\[20px\\].text-textItemBlur');
+    if (!controls) return;
+
+    /* Backdrop (transparent — closes menu on outside tap) */
+    var backdrop = document.createElement('div');
+    backdrop.id = 'mobile-header-backdrop';
+    document.body.appendChild(backdrop);
+
+    /* ⋮ toggle button */
+    var btn = document.createElement('button');
+    btn.id = 'mobile-header-menu-btn';
+    btn.setAttribute('aria-label', 'More options');
+    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none">'
+      + '<circle cx="12" cy="5"  r="2" fill="currentColor"/>'
+      + '<circle cx="12" cy="12" r="2" fill="currentColor"/>'
+      + '<circle cx="12" cy="19" r="2" fill="currentColor"/>'
+      + '</svg>';
+
+    /* Insert button at the end of the header bar */
+    var header = controls.closest('.flex.bg-newBgColorInner') || controls.parentElement;
+    if (header) header.appendChild(btn);
+
+    function openMenu() {
+      controls.classList.add('header-menu-open');
+      backdrop.classList.add('open');
+      btn.classList.add('open');
+    }
+    function closeMenu() {
+      controls.classList.remove('header-menu-open');
+      backdrop.classList.remove('open');
+      btn.classList.remove('open');
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      controls.classList.contains('header-menu-open') ? closeMenu() : openMenu();
+    });
+
+    backdrop.addEventListener('click', closeMenu);
+
+    /* Close on nav (page change removes & re-adds controls) */
+    document.addEventListener('click', function (e) {
+      if (!controls.contains(e.target) && e.target !== btn) closeMenu();
+    });
+  }
+
   function init() {
     injectPWAMeta();
     buildNav();
     buildFab();
+    buildHeaderMenu();
     abbreviateDayNames();
     setTimeout(switchToDayView, 400);
     calObserver.observe(document.body, { childList: true, subtree: true });
