@@ -90,7 +90,7 @@
       var href = prefix + item.path;
       var a = document.createElement('a');
       a.href = href;
-      a.innerHTML = item.icon + '<span>' + item.label + '</span>';
+      a.innerHTML = '<span class="nav-icon">' + item.icon + '</span><span class="nav-label">' + item.label + '</span>';
       if (isActive(item)) {
         a.classList.add('active');
         a.setAttribute('aria-current', 'page');
