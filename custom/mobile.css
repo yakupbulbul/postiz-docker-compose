@@ -3947,3 +3947,230 @@ table {
     word-break: break-word !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   COMMIT 60 — Alert/Dialog centering, Logout button, Toggle polish
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. ALERT / TOAST DIALOGS — center on screen ──────────── */
+
+/* Sonner toaster: reposition to bottom-center (default is top-left) */
+[data-sonner-toaster] {
+  --offset: 24px !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: var(--offset) !important;
+  transform: translateX(-50%) !important;
+  width: auto !important;
+  max-width: min(420px, calc(100vw - 32px)) !important;
+  z-index: 999999 !important;
+}
+
+/* Individual toast items: polished card style */
+[data-sonner-toast] {
+  border-radius: 14px !important;
+  padding: 14px 20px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10) !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  gap: 10px !important;
+}
+
+/* Toast success variant */
+[data-sonner-toast][data-type="success"] {
+  background: #065f46 !important;
+  color: #d1fae5 !important;
+}
+
+/* Toast error variant */
+[data-sonner-toast][data-type="error"] {
+  background: #991b1b !important;
+  color: #fecaca !important;
+}
+
+/* Toast default */
+[data-sonner-toast]:not([data-type]) {
+  background: rgba(30,30,30,0.95) !important;
+  color: #f3f4f6 !important;
+}
+
+/* Light mode toasts */
+:not(.dark) [data-sonner-toast]:not([data-type]) {
+  background: rgba(255,255,255,0.97) !important;
+  color: #1f2937 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+}
+
+/* AlertDialog / Radix Dialog — always centered */
+[role="alertdialog"],
+[role="dialog"] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: min(480px, calc(100vw - 32px)) !important;
+  max-height: calc(100vh - 48px) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25) !important;
+  z-index: 99999 !important;
+}
+
+/* Dialog overlay / backdrop */
+[data-radix-portal] > [data-state],
+.fixed.inset-0[class*="bg-"] {
+  z-index: 99998 !important;
+}
+
+/* Mobile: toasts sit above bottom nav */
+@media (max-width: 768px) {
+  [data-sonner-toaster] {
+    bottom: 80px !important;
+  }
+}
+
+/* ── 2. TOGGLE SWITCHES — polished iOS-style ──────────────── */
+
+/* Toggle track (outer container) */
+.w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\] {
+  width: 52px !important;
+  height: 30px !important;
+  padding: 3px !important;
+  border: none !important;
+  border-radius: 15px !important;
+  transition: background 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15) !important;
+}
+
+/* Toggle track — OFF state (gray) */
+.w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\]:not(.bg-customColor4) {
+  background: #d1d5db !important;
+}
+
+/* Toggle track — ON state (purple) — bg-customColor4 is the ON bg */
+.w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\].bg-customColor4 {
+  background: #7c3aed !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 1px rgba(124,58,237,0.3) !important;
+}
+
+/* Toggle knob */
+.w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\] .w-\[24px\].h-\[24px\].rounded-full {
+  width: 24px !important;
+  height: 24px !important;
+  background: #ffffff !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Toggle knob — active press: slightly shrink */
+.w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\]:active .w-\[24px\].h-\[24px\].rounded-full {
+  transform: scale(0.9) !important;
+}
+
+/* Dark mode toggle OFF */
+.dark .w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\]:not(.bg-customColor4) {
+  background: #4b5563 !important;
+}
+
+/* Dark mode toggle ON */
+.dark .w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\].bg-customColor4 {
+  background: #8b5cf6 !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15), 0 0 12px rgba(139,92,246,0.3) !important;
+}
+
+/* Mobile: larger touch target for toggles */
+@media (max-width: 768px) {
+  .w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\] {
+    width: 56px !important;
+    height: 32px !important;
+    min-width: 56px !important;
+    padding: 3px !important;
+  }
+  .w-\[57px\].h-\[34px\].p-\[4px\].border-fifth.border.rounded-\[100px\] .w-\[24px\].h-\[24px\].rounded-full {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+
+/* ── 3. LOGOUT BUTTON — proper styled button ──────────────── */
+
+/* Logout text container: style as a real button */
+.cursor-pointer > .text-red-400 {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 24px !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  color: #ffffff !important;
+  background: #dc2626 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.cursor-pointer > .text-red-400:hover {
+  background: #b91c1c !important;
+  box-shadow: 0 4px 12px rgba(220,38,38,0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cursor-pointer > .text-red-400:active {
+  background: #991b1b !important;
+  transform: translateY(0) !important;
+  box-shadow: none !important;
+}
+
+/* Mobile: move Logout out of the horizontal nav row, pin at bottom */
+@media (max-width: 900px) {
+  /* The .mt-4 wrapper that contains the cursor-pointer > logout span */
+  .mt-4:has(> .cursor-pointer > .text-red-400) {
+    position: fixed !important;
+    bottom: 72px !important; /* above bottom nav bar */
+    left: 16px !important;
+    right: 16px !important;
+    z-index: 100 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Add bottom padding to settings content so Logout doesn't overlap */
+  .bg-newBgColorInner.p-\[20px\].flex.flex-1.flex-col.gap-\[15px\],
+  .bg-newBgColorInner.flex-1.flex-col.flex.p-\[20px\].gap-\[12px\] {
+    padding-bottom: 80px !important;
+  }
+
+  .cursor-pointer:has(> .text-red-400) {
+    width: 100% !important;
+  }
+
+  .cursor-pointer > .text-red-400 {
+    display: flex !important;
+    width: 100% !important;
+    padding: 14px 24px !important;
+    border-radius: 12px !important;
+    font-size: 15px !important;
+    justify-content: center !important;
+    box-shadow: 0 -2px 16px rgba(0,0,0,0.2) !important;
+  }
+}
+
+/* Desktop: position logout nicely in sidebar */
+@media (min-width: 1025px) {
+  .cursor-pointer > .text-red-400 {
+    padding: 8px 20px !important;
+    font-size: 13px !important;
+    border-radius: 8px !important;
+  }
+}
