@@ -4230,3 +4230,590 @@ svg.mt-\[8px\].min-w-\[60px\].min-h-\[60px\] {
   margin-bottom: 16px;
   letter-spacing: -0.5px;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   COMMIT 61 — SocialQ Design System
+   A coherent visual layer applied on top of the existing CSS.
+   Defines tokens (color / type / space / radius / shadow / motion)
+   and refines every key surface in both dark and light themes.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   61.0 — Inter font + tokens
+   ────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Brand */
+  --sq-brand-300: #c4b5fd;
+  --sq-brand-400: #a78bfa;
+  --sq-brand-500: #7c3aed;
+  --sq-brand-600: #6d28d9;
+  --sq-brand-700: #5b21b6;
+  --sq-brand-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #d946ef 100%);
+  --sq-brand-gradient-soft: linear-gradient(135deg, rgba(124,58,237,0.16) 0%, rgba(217,70,239,0.10) 100%);
+
+  /* Light surfaces (default) */
+  --sq-surface-0: #f7f7fb;
+  --sq-surface-1: #ffffff;
+  --sq-surface-2: #f1f1f6;
+  --sq-surface-3: #e6e6ee;
+  --sq-text-strong: #0a0a14;
+  --sq-text-default: #1f1f2e;
+  --sq-text-muted: #5b5b6d;
+  --sq-text-subtle: #9a9aab;
+  --sq-border-subtle: rgba(20, 20, 35, 0.06);
+  --sq-border-default: rgba(20, 20, 35, 0.10);
+  --sq-border-strong: rgba(20, 20, 35, 0.18);
+  --sq-shadow-sm: 0 1px 2px rgba(10,10,20,0.04), 0 1px 1px rgba(10,10,20,0.03);
+  --sq-shadow-md: 0 6px 18px rgba(10,10,20,0.07), 0 2px 4px rgba(10,10,20,0.04);
+  --sq-shadow-lg: 0 20px 40px rgba(10,10,20,0.10), 0 6px 12px rgba(10,10,20,0.06);
+  --sq-shadow-brand: 0 8px 24px rgba(124,58,237,0.28), 0 2px 6px rgba(124,58,237,0.18);
+
+  /* Radius / spacing / motion */
+  --sq-r-sm: 6px;
+  --sq-r-md: 10px;
+  --sq-r-lg: 14px;
+  --sq-r-xl: 18px;
+  --sq-r-2xl: 22px;
+  --sq-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sq-dur-fast: 120ms;
+  --sq-dur-med: 200ms;
+  --sq-dur-slow: 320ms;
+
+  /* Typography */
+  --sq-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dark {
+  --sq-surface-0: #08080f;
+  --sq-surface-1: #11111c;
+  --sq-surface-2: #181826;
+  --sq-surface-3: #222234;
+  --sq-text-strong: #ffffff;
+  --sq-text-default: #e8e8f0;
+  --sq-text-muted: #a5a5b8;
+  --sq-text-subtle: #6d6d82;
+  --sq-border-subtle: rgba(255, 255, 255, 0.06);
+  --sq-border-default: rgba(255, 255, 255, 0.10);
+  --sq-border-strong: rgba(255, 255, 255, 0.18);
+  --sq-shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.25);
+  --sq-shadow-md: 0 8px 24px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.30);
+  --sq-shadow-lg: 0 24px 48px rgba(0,0,0,0.55), 0 8px 16px rgba(0,0,0,0.35);
+  --sq-shadow-brand: 0 10px 32px rgba(124,58,237,0.45), 0 2px 8px rgba(168,85,247,0.30);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.1 — Global typography + body background
+   ────────────────────────────────────────────────────────────── */
+body, html {
+  font-family: var(--sq-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background:
+    radial-gradient(1100px 600px at 10% -10%, rgba(124,58,237,0.06), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(217,70,239,0.04), transparent 60%),
+    var(--sq-surface-0) !important;
+  color: var(--sq-text-default);
+}
+
+.dark body {
+  background:
+    radial-gradient(1100px 600px at 10% -10%, rgba(124,58,237,0.18), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(217,70,239,0.10), transparent 60%),
+    var(--sq-surface-0) !important;
+}
+
+/* Headings: tighter tracking, stronger weight */
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em !important;
+  font-weight: 700 !important;
+  color: var(--sq-text-strong);
+}
+
+/* Selection */
+::selection {
+  background: rgba(124, 58, 237, 0.35);
+  color: #ffffff;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.2 — Scrollbars
+   ────────────────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124,58,237,0.35) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.30);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color var(--sq-dur-med) var(--sq-ease);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.55);
+  background-clip: content-box;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.3 — Cards (settings, calendar, agent, generic panels)
+   ────────────────────────────────────────────────────────────── */
+.bg-newBgColorInner {
+  border-radius: var(--sq-r-lg) !important;
+  border: 1px solid var(--sq-border-subtle) !important;
+  box-shadow: var(--sq-shadow-sm);
+  transition:
+    transform var(--sq-dur-fast) var(--sq-ease),
+    box-shadow var(--sq-dur-med) var(--sq-ease),
+    border-color var(--sq-dur-med) var(--sq-ease);
+}
+
+/* Inner card sections (light bg, dark bg blocks) */
+.bg-\[\#f2f2f2\],
+.dark\:bg-\[\#2b2b2b\] {
+  border-radius: var(--sq-r-md) !important;
+  border: 1px solid var(--sq-border-subtle) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.4 — Sidebar (#left-menu) — refined active state + hover
+   ────────────────────────────────────────────────────────────── */
+#left-menu a,
+#left-menu button,
+.w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] a,
+.w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] button {
+  position: relative;
+  border-radius: var(--sq-r-md) !important;
+  transition:
+    background-color var(--sq-dur-fast) var(--sq-ease),
+    color var(--sq-dur-fast) var(--sq-ease),
+    transform var(--sq-dur-fast) var(--sq-ease) !important;
+}
+
+#left-menu a:hover,
+#left-menu button:hover,
+.w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] a:hover,
+.w-\[80px\].flex.flex-col.bg-newBgColorInner.rounded-\[12px\] button:hover {
+  background: var(--sq-brand-gradient-soft) !important;
+  color: var(--sq-brand-400) !important;
+}
+
+#left-menu .active,
+#left-menu a.active,
+#left-menu button.active,
+#left-menu [aria-current="page"],
+.w-\[80px\] .active,
+.w-\[80px\] [aria-current="page"] {
+  background: var(--sq-brand-gradient) !important;
+  color: #ffffff !important;
+  box-shadow: var(--sq-shadow-brand) !important;
+}
+
+#left-menu .active svg,
+#left-menu a.active svg,
+#left-menu button.active svg,
+.w-\[80px\] .active svg,
+.w-\[80px\] [aria-current="page"] svg {
+  color: #ffffff !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.5 — Header bar polish
+   ────────────────────────────────────────────────────────────── */
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center {
+  border-bottom: 1px solid var(--sq-border-subtle) !important;
+}
+
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center h1 {
+  letter-spacing: -0.025em !important;
+  font-weight: 700 !important;
+  color: var(--sq-text-strong);
+}
+
+/* Header utility icons: unified ghost button look */
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center button,
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center a {
+  border-radius: var(--sq-r-md);
+  transition:
+    background-color var(--sq-dur-fast) var(--sq-ease),
+    color var(--sq-dur-fast) var(--sq-ease);
+}
+
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center button:hover,
+.flex.bg-newBgColorInner.h-\[80px\].px-\[20px\].items-center a:hover {
+  background: var(--sq-brand-gradient-soft);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.6 — Buttons: primary, secondary, destructive
+   ────────────────────────────────────────────────────────────── */
+
+/* Primary purple buttons (Postiz uses bg-forth/.bg-btnPrimary) */
+button.bg-forth,
+button[class*="bg-forth"],
+.bg-forth {
+  background: var(--sq-brand-gradient) !important;
+  border: none !important;
+  box-shadow: var(--sq-shadow-brand) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  transition:
+    transform var(--sq-dur-fast) var(--sq-ease),
+    box-shadow var(--sq-dur-med) var(--sq-ease),
+    filter var(--sq-dur-fast) var(--sq-ease) !important;
+}
+
+button.bg-forth:hover,
+button[class*="bg-forth"]:hover,
+.bg-forth:hover {
+  filter: brightness(1.10) saturate(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(124,58,237,0.45), 0 4px 10px rgba(217,70,239,0.30) !important;
+}
+
+button.bg-forth:active,
+button[class*="bg-forth"]:active,
+.bg-forth:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+/* "Create Account" / large primary buttons */
+button[class*="bg-primary"],
+.bg-primary {
+  background: var(--sq-brand-gradient) !important;
+  box-shadow: var(--sq-shadow-brand) !important;
+  transition: transform var(--sq-dur-fast) var(--sq-ease), filter var(--sq-dur-fast) var(--sq-ease) !important;
+}
+button[class*="bg-primary"]:hover,
+.bg-primary:hover {
+  filter: brightness(1.10);
+  transform: translateY(-1px);
+}
+
+/* Secondary / outline buttons */
+button.border:not(.bg-forth):not([class*="bg-primary"]):not(.bg-red-500):not([class*="bg-red"]) {
+  transition:
+    border-color var(--sq-dur-fast) var(--sq-ease),
+    background-color var(--sq-dur-fast) var(--sq-ease),
+    transform var(--sq-dur-fast) var(--sq-ease) !important;
+}
+button.border:not(.bg-forth):not([class*="bg-primary"]):hover {
+  border-color: var(--sq-brand-400) !important;
+  background: var(--sq-brand-gradient-soft);
+}
+
+/* Destructive (logout) */
+button.bg-red-500,
+button[class*="bg-red-"] {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  box-shadow: 0 6px 18px rgba(239,68,68,0.30) !important;
+  transition: transform var(--sq-dur-fast) var(--sq-ease), filter var(--sq-dur-fast) var(--sq-ease) !important;
+}
+button.bg-red-500:hover,
+button[class*="bg-red-"]:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Universal focus ring for keyboard nav */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--sq-brand-400);
+  outline-offset: 2px;
+  border-radius: var(--sq-r-md);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.7 — Inputs / textareas / selects
+   ────────────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+textarea,
+select {
+  border: 1px solid var(--sq-border-default) !important;
+  border-radius: var(--sq-r-md) !important;
+  background: var(--sq-surface-1) !important;
+  color: var(--sq-text-default) !important;
+  transition:
+    border-color var(--sq-dur-fast) var(--sq-ease),
+    box-shadow var(--sq-dur-med) var(--sq-ease),
+    background-color var(--sq-dur-fast) var(--sq-ease) !important;
+}
+
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="search"],
+.dark input[type="number"],
+.dark textarea,
+.dark select {
+  background: var(--sq-surface-2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--sq-text-subtle) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--sq-brand-400) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.8 — Toggle switches (theme switch + settings toggles)
+   ────────────────────────────────────────────────────────────── */
+[role="switch"][aria-checked="true"],
+[data-state="checked"][role="switch"],
+button[role="switch"][aria-checked="true"] {
+  background: var(--sq-brand-gradient) !important;
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.40), 0 4px 12px rgba(124,58,237,0.30);
+}
+
+[role="switch"] {
+  transition: background-color var(--sq-dur-med) var(--sq-ease), box-shadow var(--sq-dur-med) var(--sq-ease) !important;
+}
+
+/* Postiz purple checkbox/toggle wrappers */
+.bg-fifth,
+[class*="bg-fifth"] {
+  background: var(--sq-brand-gradient) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.9 — Modals / dialogs (logout confirm, generic dialogs)
+   ────────────────────────────────────────────────────────────── */
+
+/* Dialog backdrop */
+[role="dialog"] + div,
+.fixed.inset-0.bg-black\/50,
+.fixed.inset-0[class*="bg-black"],
+[data-radix-portal] [class*="backdrop"] {
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+}
+
+/* Dialog body */
+[role="dialog"] > div,
+.fixed.z-50[class*="rounded"],
+[data-state="open"][role="dialog"] {
+  border-radius: var(--sq-r-xl) !important;
+  border: 1px solid var(--sq-border-default) !important;
+  box-shadow: var(--sq-shadow-lg) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.10 — Tables (analytics, lists)
+   ────────────────────────────────────────────────────────────── */
+table {
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border-radius: var(--sq-r-md);
+  overflow: hidden;
+}
+
+table thead {
+  background: var(--sq-surface-2);
+}
+
+table th {
+  font-weight: 600 !important;
+  letter-spacing: -0.005em;
+  color: var(--sq-text-muted) !important;
+  text-transform: uppercase;
+  font-size: 11px !important;
+  border-bottom: 1px solid var(--sq-border-subtle) !important;
+}
+
+table tbody tr {
+  transition: background-color var(--sq-dur-fast) var(--sq-ease);
+}
+
+table tbody tr:hover {
+  background: var(--sq-brand-gradient-soft) !important;
+}
+
+table td {
+  border-bottom: 1px solid var(--sq-border-subtle) !important;
+}
+
+/* Light theme zebra stripes */
+:root:not(.dark) table tbody tr:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.11 — Calendar post cards: channel accent + hover lift
+   ────────────────────────────────────────────────────────────── */
+.bg-newBgColorInner [class*="rounded-"][class*="cursor-pointer"],
+.bg-newBgLineColor [class*="rounded-"][class*="cursor-pointer"] {
+  transition: transform var(--sq-dur-fast) var(--sq-ease), box-shadow var(--sq-dur-med) var(--sq-ease);
+}
+
+/* Hover lift for clearly-interactive post tiles */
+.cursor-pointer:hover {
+  transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.12 — Auth page (/auth, /auth/login)
+   Adds animated brand-gradient mesh on the right testimonial panel
+   and refines the left form column.
+   ────────────────────────────────────────────────────────────── */
+body:has(#socialq-auth-logo) {
+  background:
+    radial-gradient(800px 500px at 80% 20%, rgba(124,58,237,0.16), transparent 60%),
+    radial-gradient(900px 600px at 20% 80%, rgba(217,70,239,0.12), transparent 60%),
+    radial-gradient(700px 400px at 60% 50%, rgba(56,189,248,0.06), transparent 60%),
+    var(--sq-surface-0) !important;
+}
+
+#socialq-auth-logo {
+  box-shadow:
+    0 12px 30px rgba(124,58,237,0.45),
+    0 4px 10px rgba(217,70,239,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.20) !important;
+  animation: sq-pulse 4s ease-in-out infinite;
+}
+
+#socialq-auth-wordmark {
+  background: var(--sq-brand-gradient);
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  font-weight: 800 !important;
+}
+
+@keyframes sq-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50%      { transform: scale(1.03); filter: brightness(1.08); }
+}
+
+/* Auth form headings */
+body:has(#socialq-auth-logo) h1,
+body:has(#socialq-auth-logo) .text-4xl,
+body:has(#socialq-auth-logo) [class*="text-3xl"] {
+  letter-spacing: -0.03em !important;
+  font-weight: 800 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.13 — Toasts / notifications
+   ────────────────────────────────────────────────────────────── */
+[role="status"],
+[role="alert"],
+[class*="toast"],
+[data-sonner-toast] {
+  border-radius: var(--sq-r-lg) !important;
+  border: 1px solid var(--sq-border-default) !important;
+  box-shadow: var(--sq-shadow-lg) !important;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  animation: sq-toast-in var(--sq-dur-slow) var(--sq-ease);
+}
+
+@keyframes sq-toast-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.14 — Settings sidebar nav: refined active state
+   ────────────────────────────────────────────────────────────── */
+@media (min-width: 1025px) {
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] a,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] button {
+    transition:
+      background-color var(--sq-dur-fast) var(--sq-ease),
+      color var(--sq-dur-fast) var(--sq-ease),
+      transform var(--sq-dur-fast) var(--sq-ease) !important;
+  }
+
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] a:hover,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] button:hover {
+    background: var(--sq-brand-gradient-soft) !important;
+    color: var(--sq-brand-400) !important;
+  }
+
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] .active,
+  .bg-newBgColorInner.p-\[20px\].flex.flex-col.transition-all.w-\[260px\] [aria-current="page"] {
+    background: var(--sq-brand-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: var(--sq-shadow-brand) !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.15 — Misc: muted text, borders, focus, motion
+   ────────────────────────────────────────────────────────────── */
+.text-textColor,
+.text-newTextColor {
+  color: var(--sq-text-default) !important;
+}
+
+hr, .border-t, .border-b {
+  border-color: var(--sq-border-subtle) !important;
+}
+
+/* Reduced-motion friendliness */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   61.16 — Demo mode overlay (for TikTok review recording)
+   Activate via: document.body.classList.add('sq-demo')
+   ────────────────────────────────────────────────────────────── */
+body.sq-demo::before {
+  content: attr(data-sq-step);
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  padding: 10px 20px;
+  background: var(--sq-brand-gradient);
+  color: #ffffff;
+  font-family: var(--sq-font);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  border-radius: var(--sq-r-xl);
+  box-shadow: var(--sq-shadow-brand);
+  pointer-events: none;
+  max-width: 80vw;
+  text-align: center;
+}
+
+body.sq-demo:not([data-sq-step])::before,
+body.sq-demo[data-sq-step=""]::before {
+  display: none;
+}
