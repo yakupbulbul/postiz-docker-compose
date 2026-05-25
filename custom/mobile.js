@@ -200,7 +200,7 @@
       { name: 'apple-mobile-web-app-capable',       content: 'yes' },
       { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
       { name: 'mobile-web-app-capable',             content: 'yes' },
-      { name: 'apple-mobile-web-app-title',         content: 'Postiz' }
+      { name: 'apple-mobile-web-app-title',         content: 'SocialQ' }
     ];
     metas.forEach(function (m) {
       // Skip if the page already has this meta (avoid duplicates from SSR)
@@ -472,4 +472,175 @@
     init();
   }
 
+})();
+
+
+// ============================================
+// SocialQ Rebrand — replace Postiz text & favicon
+// ============================================
+(function socialQRebrand() {
+  function replacePostizText(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (node.nodeValue && node.nodeValue.includes("Postiz")) {
+        node.nodeValue = node.nodeValue.replace(/Postiz/g, "SocialQ");
+      }
+    }
+  }
+
+  function setFavicon() {
+    let link = document.querySelector("link[rel*='icon']");
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
+    }
+    link.type = "image/png";
+    link.href = "/custom/favicon.png";
+
+    const apple = document.querySelector("link[rel='apple-touch-icon']");
+    if (apple) apple.href = "/custom/apple-touch-icon.png";
+  }
+
+  function updateTitle() {
+    if (document.title.includes("Postiz")) {
+      document.title = document.title.replace(/Postiz/g, "SocialQ");
+    }
+  }
+
+  function fixAuthLinks() {
+    document.querySelectorAll("a[href*='postiz.com/terms']").forEach(function(a) {
+      a.href = "/terms";
+    });
+    document.querySelectorAll("a[href*='postiz.com/privacy']").forEach(function(a) {
+      a.href = "/privacy";
+    });
+  }
+
+  function replaceAuthLogo() {
+    if (!/\/(auth|login|register)(\/|$)/.test(window.location.pathname)) return;
+    if (document.getElementById("socialq-auth-logo")) return;
+
+    var svgs = document.querySelectorAll("svg");
+    svgs.forEach(function(svg) {
+      var w = svg.getAttribute("width") || svg.style.width || "";
+      var cls = svg.className.baseVal || svg.getAttribute("class") || "";
+      var isLargeLogo = (parseInt(w) >= 50) ||
+                        cls.indexOf("min-w-[60") > -1 ||
+                        cls.indexOf("min-h-[60") > -1 ||
+                        (cls.indexOf("mt-[8px]") > -1 && cls.indexOf("min-w-") > -1);
+      if (isLargeLogo && svg.closest("a, div, header, nav")) {
+        var container = svg.parentElement;
+        svg.style.display = "none";
+        if (!document.getElementById("socialq-auth-logo")) {
+          var img = document.createElement("img");
+          img.id = "socialq-auth-logo";
+          img.src = "/custom/favicon.png";
+          img.alt = "SocialQ";
+          container.insertBefore(img, svg);
+          var wm = document.createElement("div");
+          wm.id = "socialq-auth-wordmark";
+          wm.textContent = "SocialQ";
+          container.insertBefore(wm, svg);
+        }
+      }
+    });
+  }
+
+  function fixPWAMeta() {
+    var meta = document.querySelector("meta[name='apple-mobile-web-app-title']");
+    if (meta && meta.content === "Postiz") meta.content = "SocialQ";
+  }
+
+  function run() {
+    replacePostizText(document.body);
+    setFavicon();
+    updateTitle();
+    fixAuthLinks();
+    replaceAuthLogo();
+    fixPWAMeta();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(m) {
+      m.addedNodes.forEach(function(n) {
+        if (n.nodeType === 1) replacePostizText(n);
+      });
+    });
+    updateTitle();
+    fixAuthLinks();
+    replaceAuthLogo();
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
+
+
+// ============================================
+// Logout fix — clear auth cookie with correct domain
+// ============================================
+(function fixLogout() {
+  var origDesc = Object.getOwnPropertyDescriptor(Document.prototype, "cookie");
+  if (!origDesc || !origDesc.set) return;
+
+  var cookieDomains = [
+    ".socialq.cloud",
+    "socialq.cloud",
+    ".scenarix.online",
+    "postiz.scenarix.online",
+    window.location.hostname
+  ];
+
+  function clearAllAuthCookies() {
+    var names = ["auth", "showorg", "impersonate"];
+    var paths = ["/", ""];
+    names.forEach(function(name) {
+      cookieDomains.forEach(function(domain) {
+        paths.forEach(function(path) {
+          var c = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=" + path + "; domain=" + domain;
+          origDesc.set.call(document, c);
+          origDesc.set.call(document, c + "; secure");
+          origDesc.set.call(document, c + "; secure; SameSite=None");
+        });
+      });
+      origDesc.set.call(document, name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/");
+    });
+  }
+
+  // Intercept cookie setter — when Postiz clears auth, also clear with domain
+  Object.defineProperty(document, "cookie", {
+    get: function() { return origDesc.get.call(this); },
+    set: function(val) {
+      var result = origDesc.set.call(this, val);
+      if (/^(auth|showorg|impersonate)=\s*;/.test(val)) {
+        clearAllAuthCookies();
+      }
+      return result;
+    },
+    configurable: true
+  });
+
+  // Also listen for "Yes logout" button click as a fallback
+  document.addEventListener("click", function(e) {
+    var el = e.target;
+    while (el && el !== document.body) {
+      var text = (el.textContent || "").trim().toLowerCase();
+      if ((el.tagName === "BUTTON" || el.getAttribute("role") === "button") && text.indexOf("yes") !== -1 && text.indexOf("logout") !== -1) {
+        setTimeout(function() {
+          clearAllAuthCookies();
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.href = "/";
+        }, 300);
+        return;
+      }
+      el = el.parentElement;
+    }
+  }, true);
 })();

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c084fc"/>
+      <stop offset="100%" style="stop-color:#e9d5ff"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="1024" height="1024" rx="220" ry="220" fill="url(#bg)"/>
+  <!-- Stylized Q shape - outer circle -->
+  <circle cx="470" cy="440" r="260" fill="none" stroke="white" stroke-width="72" opacity="0.95"/>
+  <!-- Q tail - diagonal slash extending from circle -->
+  <line x1="620" y1="590" x2="800" y2="770" stroke="white" stroke-width="72" stroke-linecap="round" opacity="0.95"/>
+  <!-- Three small dots representing social/queue - stacked vertically on right -->
+  <circle cx="820" cy="280" r="36" fill="url(#accent)"/>
+  <circle cx="820" cy="390" r="36" fill="url(#accent)"/>
+  <circle cx="820" cy="500" r="36" fill="url(#accent)"/>
+  <!-- Connecting lines between dots (queue visualization) -->
+  <line x1="820" y1="316" x2="820" y2="354" stroke="url(#accent)" stroke-width="8" stroke-linecap="round"/>
+  <line x1="820" y1="426" x2="820" y2="464" stroke="url(#accent)" stroke-width="8" stroke-linecap="round"/>
+</svg>

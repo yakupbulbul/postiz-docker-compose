@@ -1,3 +1,11 @@
-your-domain.com {
+postiz.scenarix.online {
     reverse_proxy postiz:5000
+}
+
+socialq.cloud {
+    reverse_proxy postiz:5000
+}
+
+www.socialq.cloud {
+    redir https://socialq.cloud{uri} permanent
 }
